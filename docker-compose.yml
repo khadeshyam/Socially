@@ -1,0 +1,56 @@
+services:
+  db:
+    container_name: mysql-db
+    env_file: 
+      - .env
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    image: mysql:latest
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - 3306:3306
+      - 33060:33060
+
+  backend:
+    container_name: node-backend
+    env_file: 
+      - .env
+    environment:
+      - NODE_ENV=production
+      - MYSQL_HOST=${MYSQL_HOST}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_PORT=${MYSQL_PORT}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - JWT_SECRET=${JWT_SECRET}
+    build:
+      context: ./server
+    volumes:
+      - ./server:/server
+    depends_on:
+      - db
+    ports:
+      - 5000:5000
+      
+
+  frontend:
+    container_name: react-frontend
+    env_file: 
+      - .env
+    environment:
+      - NODE_ENV=prodcution
+      - REACT_APP_UPLOAD_PRESET_NAME=${REACT_APP_UPLOAD_PRESET_NAME}
+      - REACT_APP_CLOUD_NAME=${REACT_APP_CLOUD_NAME}
+    build:
+      context: ./client
+    volumes:
+      - ./client/src:/client/src
+    depends_on:
+      - backend
+    ports:
+      - 3000:3000
+
+volumes:
+  db-data:
