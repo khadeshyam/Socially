@@ -1,0 +1,19 @@
+name: Docker Compose Build and Push
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2
+
+    - name: Create env file
+      run: |
+        echo "${{ secrets.ENV_FILE }}" >> .env
+        
+    - name: Build and push Docker images
+      run: |
+        docker-compose up -d
