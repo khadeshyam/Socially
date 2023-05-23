@@ -2,9 +2,13 @@ FROM node:18-alpine
 
 WORKDIR /server
 
-COPY package*.json ./
+COPY package.json ./
 
-RUN yarn install --frozen-lockfile --dev
+COPY yarn.lock ./
+
+RUN yarn global add nodemon
+
+RUN yarn install --frozen-lockfile
 
 COPY . .
 
