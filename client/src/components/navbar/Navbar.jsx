@@ -4,10 +4,10 @@ import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import GridViewOutlinedIcon from "@mui/icons-material/GridViewOutlined";
 import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
 import EmailOutlinedIcon from "@mui/icons-material/EmailOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import CloseIcon from "@mui/icons-material/Close";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import { Link,useNavigate } from "react-router-dom";
 import { DarkModeContext } from "../../context/darkModeContext";
 import { AuthContext } from "../../context/authContext";
@@ -50,14 +50,16 @@ const Navbar = () => {
         </div>
       </div>
       <div className="right">
-        <PersonOutlineOutlinedIcon />
         <EmailOutlinedIcon />
         <NotificationsOutlinedIcon />
         <div className="user">
+        {currentUser.profilePic?
           <img
             src={currentUser.profilePic}
             alt=""
-          />
+          />:
+          <AccountCircleIcon />
+        }
           <span>{currentUser.username}</span>
         </div>
       </div>

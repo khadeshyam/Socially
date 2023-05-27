@@ -73,6 +73,8 @@
         align-items: center;
         gap: 10px;
         font-weight: 500;
+        color:themed("textColor");
+        background-color: themed("bg");
 
         img {
           width: 30px;
