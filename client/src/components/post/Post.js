@@ -43,6 +43,7 @@ const Post = ({ post }) => {
     {
       onSuccess: () => {
         queryClient.invalidateQueries(['posts','user']);
+        queryClient.refetchQueries();
       },
     }
   );
