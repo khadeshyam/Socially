@@ -7,7 +7,7 @@ export const register = (req, res) => {
   //CHECK IF USER EXISTS
   const q = 'SELECT * FROM users WHERE username = ? OR email = ?';
   db.query(q, [req.body.username,req.body.email], (err, data) => {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(500).json({ message: 'Server Error' });
     if (data.length > 0) return res.status(409).json({ message: 'user already exists' });
 
     //CREATE A NEW USER
@@ -19,7 +19,7 @@ export const register = (req, res) => {
     const q = 'INSERT INTO users (`username`,`email`,`password`,`name`) VALUES (?,?,?,?)';
     const values = [req.body.username, req.body.email, hash, req.body.name];
     db.query(q, values, (err, data) => {
-      if (err) return res.status(500).json(err);
+      if (err) return res.status(500).json({ message: 'Server Error' });
       return res.status(200).json({ message: 'user created' });
     });
   })
@@ -27,7 +27,7 @@ export const register = (req, res) => {
 export const login = (req, res) => {
   const q = 'SELECT * FROM users WHERE username = ? OR email = ?';
   db.query(q, [req.body.usernameOrEmail, req.body.usernameOrEmail], (err, data) => {
-    if (err) return res.status(500).json(err);
+    if (err) return res.status(500).json({ message: 'Server Error' });
     if (data.length === 0) return res.status(404).json({ message: 'user not found' });
 
     const user = data[0];
