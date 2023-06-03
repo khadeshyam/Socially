@@ -6,13 +6,20 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      SERVER_ENV: ${{ secrets.SERVER_ENV }}
+      CLIENT_ENV: ${{ secrets.CLIENT_ENV }}
+      DB_ENV: ${{ secrets.DB_ENV }}
+   
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Create env file
+    - name: Create env files
       run: |
-        echo "${{ secrets.ENV_FILE }}" >> .env
+        echo $SERVER_ENV > server.env
+        echo $CLIENT_ENV > client.env
+        echo $DB_ENV > db.env
         
     - name: Build and push Docker images
       run: |
