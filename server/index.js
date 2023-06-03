@@ -8,6 +8,7 @@ import relationshipRoutes from './routes/relationships.js';
 import likeRoutes from './routes/likes.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
+import {initDb} from './connect.js'
 
 //middlewares
 app.use((req,res,next)=>{
@@ -30,4 +31,5 @@ app.use('/api/relationships',relationshipRoutes);
 
 app.listen(5000,()=>{
     console.log(`server is listening on port 5000`);
+    initDb();
 })

@@ -9,12 +9,12 @@ export const db = mysql.createConnection({
   port: process.env.MYSQL_PORT
 });
 
-try {
-  await db.execute(`CREATE DATABASE IF NOT EXISTS social`);
+export const initDb = () => {
+  db.execute(`CREATE DATABASE IF NOT EXISTS social`)
 
-  db.query(`USE social`)
+  db.query(`USE social`);
 
-  await db.execute(`
+  db.execute(`
   CREATE TABLE IF NOT EXISTS social.users (
       id INT AUTO_INCREMENT PRIMARY KEY,
       username VARCHAR(45) NOT NULL,
@@ -28,7 +28,7 @@ try {
   )
 `);
 
-  await db.execute(`
+  db.execute(`
   CREATE TABLE IF NOT EXISTS social.posts (
       id INT AUTO_INCREMENT PRIMARY KEY,
       \`desc\` VARCHAR(200),
@@ -42,7 +42,7 @@ try {
   )
 `);
 
-  await db.execute(`
+  db.execute(`
   CREATE TABLE IF NOT EXISTS social.likes (
       id INT AUTO_INCREMENT PRIMARY KEY,
       userId INT NOT NULL,
@@ -58,7 +58,7 @@ try {
   )
 `);
 
-  await db.execute(`
+  db.execute(`
   CREATE TABLE IF NOT EXISTS social.comments (
       id INT AUTO_INCREMENT PRIMARY KEY,
       \`desc\` VARCHAR(45),
@@ -76,7 +76,7 @@ try {
   )
 `);
 
-  await db.execute(`
+  db.execute(`
   CREATE TABLE IF NOT EXISTS social.stories (
       id INT AUTO_INCREMENT PRIMARY KEY,
       img VARCHAR(200),
@@ -88,7 +88,7 @@ try {
   )
 `);
 
-  await db.execute(`
+  db.execute(`
   CREATE TABLE IF NOT EXISTS social.relationships (
       id INT AUTO_INCREMENT PRIMARY KEY,
       followerUserId INT NOT NULL,
@@ -105,6 +105,4 @@ try {
 `);
 
   console.log('connected to MySQL DB!');
-}catch (err) {
-  console.error(err);
 }
