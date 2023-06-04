@@ -2,7 +2,7 @@ name: Docker Compose Build and Push
 on:
   push:
     branches:
-      - test/docker-login
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -30,6 +30,6 @@ jobs:
 
     - name: Build and push Docker images
       run: |
-        docker-compose up -d
+        docker-compose build
         docker images
-        docker ps -a
+        docker-compose push
