@@ -26,9 +26,6 @@ jobs:
       run: |
         echo $DOCKERHUB_TOKEN
         echo $DOCKERHUB_USERNAME
-      with:
-        username: $DOCKERHUB_USERNAME
-        password: $DOCKERHUB_TOKEN
 
     - name: Build and push Docker images
       run: |
