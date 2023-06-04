@@ -2,7 +2,7 @@ name: Docker Compose Build and Push
 on:
   push:
     branches:
-      - test/docker-push
+      - master
 jobs:
   build:
     runs-on: ubuntu-latest
