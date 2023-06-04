@@ -19,6 +19,7 @@ services:
       - server.env
     build:
       context: ./server
+    image: shyam2056/socially-backend
     volumes:
       - ./server:/server
     depends_on:
@@ -32,6 +33,7 @@ services:
       - client.env
     build:
       context: ./client
+    image: shyam2056/socially-frontend
     volumes:
       - ./client/src:/client/src
     depends_on:
