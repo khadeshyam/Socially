@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   db:
-    container_name: mysql-db
+    container_name: socially-mysqldb
     env_file: 
       - db.env
     image: mysql:latest
@@ -14,7 +14,7 @@ services:
       - 33060:33060
 
   backend:
-    container_name: node-backend
+    container_name: socially-backend
     env_file: 
       - server.env
     build:
@@ -27,7 +27,7 @@ services:
       - 5000:5000
       
   frontend:
-    container_name: react-frontend
+    container_name: socially-frontend
     env_file: 
       - client.env
     build:
