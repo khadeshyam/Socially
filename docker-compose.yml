@@ -35,8 +35,6 @@ services:
   frontend:
     container_name: socially-frontend
     restart: always
-    stdin_open: true
-    tty: true
     env_file:
       - ./env/client.env
     build:
