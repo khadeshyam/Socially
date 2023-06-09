@@ -22,6 +22,7 @@ services:
     image: shyam2056/socially-backend
     volumes:
       - ./server:/server
+    restart: always
     depends_on:
       - db
     ports:
@@ -36,6 +37,7 @@ services:
     image: shyam2056/socially-frontend
     volumes:
       - ./client/src:/client/src
+    restart: always
     depends_on:
       - backend
     ports:
