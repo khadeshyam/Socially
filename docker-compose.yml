@@ -4,7 +4,7 @@ services:
   db:
     container_name: socially-mysqldb
     env_file: 
-      - db.env
+      - ./env/db.env
     image: mysql:latest
     restart: always
     volumes:
@@ -16,7 +16,7 @@ services:
   backend:
     container_name: socially-backend
     env_file: 
-      - server.env
+      - ./env/server.env
     build:
       context: ./server
     image: shyam2056/socially-backend
@@ -30,7 +30,7 @@ services:
   frontend:
     container_name: socially-frontend
     env_file: 
-      - client.env
+      - ./env/client.env
     build:
       context: ./client
     image: shyam2056/socially-frontend
