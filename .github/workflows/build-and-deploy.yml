@@ -35,7 +35,7 @@ jobs:
 
     - name: Build and push Docker images
       run: |
-        docker buider prune --all --force
+        docker builder prune --all --force
         docker-compose build
         docker images
         docker-compose push
