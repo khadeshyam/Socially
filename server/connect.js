@@ -9,7 +9,16 @@ export const db = mysql.createConnection({
   port: process.env.MYSQL_PORT
 });
 
-export const initDb = () => {
+db.connect((err) => {
+  if (err) {
+    console.log('error connecting: ' + err.stack);
+    return;
+  }
+  console.log('connected to MySQL DB!');
+});
+
+
+export  const initDb = async () => {
   db.execute(`CREATE DATABASE IF NOT EXISTS social`)
 
   db.query(`USE social`);
@@ -103,6 +112,4 @@ export const initDb = () => {
           ON DELETE CASCADE
   )
 `);
-
-  console.log('connected to MySQL DB!');
 }
