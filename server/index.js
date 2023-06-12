@@ -12,6 +12,7 @@ import {initDb} from './connect.js';
 import path from 'path';
 const __dirname = path.dirname(path.resolve());
 console.log(__dirname);
+const PORT = process.env.PORT || 5000;
 
 //middlewares
 app.use(Express.static(path.join(__dirname, '/client/build')));
@@ -37,7 +38,7 @@ app.get('/*', (req, res) => {
     res.sendFile(path.join(__dirname, '/client/build/index.html'));
 });
 
-app.listen(5000,()=>{
-    console.log(`server is listening on port 5000`);
+app.listen(PORT,()=>{
+    console.log(`server is listening on port ${PORT}`);
     initDb();
 })

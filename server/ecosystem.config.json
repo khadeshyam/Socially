@@ -1,0 +1,27 @@
+[
+    {
+        "name": "server-instance-1",
+        "script": "index.js",
+        "env": {
+            "NODE_ENV": "production",
+            "PORT": 3000
+        }
+    },
+    {
+        "name": "server-instance-2",
+        "script": "index.js",
+        "env": {
+            "NODE_ENV": "production",
+            "PORT": 3001
+        }
+    },
+    {
+        "name": "server-instance-3",
+        "script": "index.js",
+        "env": {
+            "NODE_ENV": "production",
+            "PORT": 3002
+        }
+    }
+]
+  
