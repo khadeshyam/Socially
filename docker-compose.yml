@@ -22,6 +22,7 @@ services:
     image: shyam2056/socially-backend
     volumes:
       - ./server:/server
+      - /server/node_modules
     restart: always
     depends_on:
       - db
@@ -34,9 +35,12 @@ services:
       - ./env/client.env
     build:
       context: ./client
+    stdin_open: true
+    tty: true
     image: shyam2056/socially-frontend
     volumes:
       - ./client/src:/client/src
+      - /client/src/node_modules
     restart: always
     depends_on:
       - backend
