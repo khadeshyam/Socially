@@ -40,7 +40,7 @@ services:
     image: shyam2056/socially-frontend
     volumes:
       - ./client/src:/client/src
-      - /client/src/node_modules
+      - /client/node_modules
     restart: always
     depends_on:
       - backend
