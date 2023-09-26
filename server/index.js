@@ -15,7 +15,7 @@ const PORT = process.env.PORT || 5000;
 
 //middlewares
 app.use(cors({
-    origin: '*',
+    origin: 'http://localhost:3000',
     credentials: true, //access-control-allow-credentials:true,
     preflightContinue: true,
     optionsSuccessStatus: 200
