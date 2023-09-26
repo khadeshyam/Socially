@@ -16,13 +16,11 @@ const PORT = process.env.PORT || 5000;
 //middlewares
 app.use(cors({
     origin: '*',
-    credentials: true
+    credentials: true, //access-control-allow-credentials:true,
+    preflightContinue: true,
+    optionsSuccessStatus: 200
 }));
 app.use(Express.static(path.join(__dirname, '/build')));
-app.use((req,res,next)=>{
-    res.header('Access-Control-Allow-Credentials', true);
-    next();
-});
 app.use(Express.json());
 
 app.use(cookieParser());
