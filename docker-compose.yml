@@ -2,10 +2,10 @@ version: "3.8"
 
 services:
   db:
+    image: mysql:8.1.0
     container_name: socially-mysqldb
     env_file: 
       - ./env/db.env
-    image: mysql:8.1.0
     restart: always
     volumes:
       - db-data:/var/lib/mysql
@@ -14,12 +14,15 @@ services:
       - 33060:33060
 
   backend:
+    image: shyam2056/socially-backend
     container_name: socially-backend
     env_file: 
       - ./env/server.env
     build:
+      args:
+        - NODE_ENV=development
       context: ./server
-    image: shyam2056/socially-backend
+      target: development
     volumes:
       - ./server:/server
       - /server/node_modules
@@ -30,14 +33,17 @@ services:
       - 5000:5000
       
   frontend:
+    image: shyam2056/socially-frontend
     container_name: socially-frontend
     env_file: 
       - ./env/client.env
     build:
+      args:
+        - NODE_ENV=development
       context: ./client
+      target: development
     stdin_open: true
     tty: true
-    image: shyam2056/socially-frontend
     volumes:
       - ./client/src:/client/src
       - /client/node_modules
