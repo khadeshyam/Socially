@@ -1,7 +1,7 @@
 import './register.scss';
 import { Link,useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import axios from 'axios';
+import { makeRequest } from '../../axios';
 
 function Register() {
 
@@ -21,7 +21,7 @@ function Register() {
   const handleClick = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:5000/api/auth/register', inputs);
+      await makeRequest.post('/auth/register', inputs);
       setInputs(
         { username: '', email: '', password: '', name: '' }
       );
