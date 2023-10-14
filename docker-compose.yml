@@ -12,6 +12,8 @@ services:
     ports:
       - 3306:3306
       - 33060:33060
+    networks:
+      - db-network
 
   backend:
     image: shyam2056/socially-backend
@@ -30,6 +32,9 @@ services:
       - db
     ports:
       - 5000:5000
+    networks:
+      - db-network
+      - client-network
       
   frontend:
     image: shyam2056/socially-frontend
@@ -50,6 +55,12 @@ services:
       - backend
     ports:
       - 3000:3000
+    networks:
+      - client-network
 
 volumes:
   db-data:
+  
+networks:
+  db-network:
+  client-network:

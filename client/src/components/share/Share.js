@@ -13,6 +13,8 @@ const Share = () => {
 
   const [desc, setDesc] = useState('');
   const [file, setFile] = useState(null);
+  const [isLoading, setLoading] = useState(false);
+  console.log(isLoading);
 
   const uploadToCloudinary = async () => {
     console.log(file);
@@ -41,6 +43,8 @@ const Share = () => {
   );
 
   const handleClick = async (e) => {
+    e.preventDefault();
+    setLoading(true);
     try {
       const uploadedImageUrl = await uploadToCloudinary();
       mutation.mutate({ desc, img: uploadedImageUrl });
@@ -48,6 +52,9 @@ const Share = () => {
       setFile(null);
     } catch (error) {
       console.log(error);
+    }
+    finally {
+      setLoading(false);
     }
   }
 
@@ -89,7 +96,7 @@ const Share = () => {
             </div>
           </div>
           <div className='right'>
-            <button onClick={handleClick}>Share</button>
+            <button onClick={handleClick} disabled={isLoading}>Share</button>
           </div>
         </div>
       </div>

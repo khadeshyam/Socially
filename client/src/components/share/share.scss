@@ -91,6 +91,10 @@
             background-color: #5271ff;
             border-radius: 3px;
           }
+          button[disabled] {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
         }
       }
     }

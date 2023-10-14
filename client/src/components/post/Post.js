@@ -11,6 +11,8 @@ import { AuthContext } from '../../context/authContext';
 import moment from "moment";
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { makeRequest } from '../../axios';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css'
 
 const Post = ({ post }) => {
   const [commentOpen, setCommentOpen] = useState(false);
@@ -39,10 +41,10 @@ const Post = ({ post }) => {
   );
   const deleteMutation = useMutation((postId) => {
     return makeRequest.delete(`/posts/${postId}`);
-    },
+  },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries(['posts','user']);
+        queryClient.invalidateQueries(['posts', 'user']);
         queryClient.refetchQueries();
       },
     }
@@ -63,7 +65,7 @@ const Post = ({ post }) => {
       <div className="container">
         <div className="user">
           <div className="userInfo">
-            <img src={post.userProfilePic} alt="" />
+            <LazyLoadImage src={post.userProfilePic} effect='blur' alt="" />
             <div className="details">
               <Link
                 to={{ pathname: `/profile/${post.userId}` }}
@@ -79,7 +81,9 @@ const Post = ({ post }) => {
         </div>
         <div className="content">
           <p>{post.desc}</p>
-          <img src={post.img} alt="" />
+          <div class='wireframe'>
+            <LazyLoadImage effect='blur' src={post.img} alt="" />
+          </div>
         </div>
         <div className="info">
           <div className="item" onClick={handleLike} >
