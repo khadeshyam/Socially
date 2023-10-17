@@ -96,6 +96,18 @@
           }
         }
       }
+      p{
+        height: 20px;
+      }
+      .success {
+        color: green;
+        font-size: 14px;
+      }
+      
+      .error {
+        color: red;
+        font-size: 14px;
+      }
       div{
         display:none;
         @include mobile {

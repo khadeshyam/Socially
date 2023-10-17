@@ -11,6 +11,8 @@ function Login() {
     password: '',
   });
   const [err, setErr] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [msg, setMsg] = useState("");
 
   const navigate = useNavigate();
 
@@ -22,13 +24,20 @@ function Login() {
     setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     try {
       e.preventDefault();
-      loggin(inputs);
+      if(!inputs.usernameOrEmail || !inputs.password){
+        throw new Error("Please fill all the fields");
+      }
+      setIsLoading(true);
+      await loggin(inputs);
     } catch (err) {
-      console.log(err);
       setErr(true);
+      const message = err.response?.data?.message || err?.message;
+      setMsg(message);
+    }finally{
+      setIsLoading(false);
     }
   };
   return (
@@ -50,8 +59,9 @@ function Login() {
           <form>
             <input type="text" placeholder="Username or Email" name="usernameOrEmail" onChange={handleChange} />
             <input type="password" placeholder="Password" name="password" onChange={handleChange} />
-            <button onClick={handleLogin}>Login</button>
+            <button onClick={handleLogin} disabled={isLoading}> {isLoading ? 'Loading...' : 'Login'} </button>
           </form>
+            <p className={err?'error':'success'}>{msg}</p>
           <div>
             <span>Don't have an account?</span>
             <Link to='/register'>Register

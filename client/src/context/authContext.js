@@ -11,6 +11,7 @@ export const AuthContextProvider = ({ children }) => {
     const loggin = async (inputs) => {
             const res = await makeRequest.post('/auth/login',inputs);
             setCurrentUser(res.data);
+            return res;
     }
 
     useEffect(() => {

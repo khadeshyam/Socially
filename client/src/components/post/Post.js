@@ -81,7 +81,7 @@ const Post = ({ post }) => {
         </div>
         <div className="content">
           <p>{post.desc}</p>
-          <div class='wireframe'>
+          <div className='wireframe'>
             <LazyLoadImage effect='blur' src={post.img} alt="" />
           </div>
         </div>
