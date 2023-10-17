@@ -6,7 +6,7 @@ export const getRelationships = (req, res) => {
     db.query(q, [req.query.followedUserId], (err, data) => {
         if (err) return res.status(500).json({ message: 'Server Error' });
         // console.log(data);
-        return res.status(200).json(data.map((relationship) => relationship.followerUserId));
+        return res.status(200).json(data?.map((relationship) => relationship.followerUserId));
     })
 }
 

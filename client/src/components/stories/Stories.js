@@ -3,6 +3,7 @@ import "./stories.scss";
 import { AuthContext } from "../../context/authContext";
 
 const Stories = () => {
+  //console.log(`stories rendered`);
   const {currentUser} = useContext(AuthContext);
   //Temporary Data
   const stories = [
@@ -34,7 +35,7 @@ const Stories = () => {
         <span>{currentUser.username}</span>
         <button>+</button>
       </div>
-      {stories.map((story) => (
+      {stories?.map((story) => (
         <div className="story" key={story.id}>
           <img src={story.img} alt="story"/>
           <span>{story.name}</span>

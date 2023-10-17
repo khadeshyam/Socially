@@ -2,6 +2,7 @@ import "./rightBar.scss";
 import React, { useState, useEffect, useRef } from "react";
 
 const RightBar = () => {
+  //console.log("rightbar rendered");
   const [scrollRightY, setScrollRightY] = useState(0);
   const myRef = useRef(null);
   useEffect(() => {

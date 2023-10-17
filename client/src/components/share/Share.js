@@ -9,6 +9,7 @@ import axios from 'axios';
 import { makeRequest } from '../../axios';
 
 const Share = () => {
+  //console.log(`share rendered`);
   const { currentUser } = useContext(AuthContext)
 
   const [desc, setDesc] = useState('');

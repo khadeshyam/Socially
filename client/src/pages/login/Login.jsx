@@ -5,6 +5,7 @@ import { AuthContext } from "../../context/authContext";;
 
 function Login() {
   const { loggin, currentUser } = useContext(AuthContext);
+  //console.log('login rendered');
 
   const [inputs, setInputs] = useState({
     usernameOrEmail: '',

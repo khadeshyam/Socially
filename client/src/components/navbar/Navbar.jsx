@@ -14,6 +14,7 @@ import { AuthContext } from "../../context/authContext";
 import { WbSunnyOutlined } from "@mui/icons-material";
 
 const Navbar = () => {
+  //console.log("navbar rendered");
   const [searchValue, setSearchValue] = useState(JSON.parse(localStorage.getItem("searchValue")) || "");
   const { toggle,darkMode } = useContext(DarkModeContext);
   const {currentUser} = useContext(AuthContext);

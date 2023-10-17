@@ -16,6 +16,7 @@ import Fund from "../../assets/13.png";
 import { AuthContext } from "../../context/authContext";
 
 const LeftBar = () => {
+  //console.log("leftbar rendered");
   const[scrollLeftY,setScrollLeftY] = useState(0);
   const myRef = useRef(null);
   const {currentUser} = useContext(AuthContext);

@@ -16,6 +16,7 @@ import { AuthContext } from '../../context/authContext';
 import  Update  from '../../components/update/Update';
 
 const Profile = () => {
+  //console.log("profile rendered");
   const [openUpdate, setOpenUpdate] = useState(false);
   const location = useLocation();
   const userId = parseInt(location.pathname.split("/")[2]);
