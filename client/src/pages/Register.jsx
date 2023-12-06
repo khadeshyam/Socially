@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Box, Flex, Text, Input, Button, Divider, AbsoluteCenter } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Input, Button, Box, Text, Flex, FormControl, FormLabel, Link as ChakraLink, useToast } from '@chakra-ui/react';
 import { makeRequest } from '../axios';
 
 function Register() {
@@ -11,11 +11,7 @@ function Register() {
     name: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [msg, setMsg] = useState('');
-  const [isToastOpen, setIsToastOpen] = useState(false); // Flag to track toast state
   const navigate = useNavigate();
-  const toast = useToast();
-  const toastId = 'register-toast'; // Unique ID for the toast
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -32,74 +28,109 @@ function Register() {
       setInputs({ username: '', email: '', password: '', name: '' });
       navigate('/login');
     } catch (err) {
-      const message = err.response?.data?.message || err?.message;
-      setMsg(message);
-      if (!isToastOpen) {
-        setIsToastOpen(true); // Set the flag to true when showing toast
-        if (!toast.isActive(toastId)) {
-          toast({
-            id: toastId,
-            title: 'Error',
-            description: message,
-            status: 'error',
-            duration: 5000,
-            isClosable: true,
-            position: 'top',
-            onCloseComplete: () => setIsToastOpen(false), // Clear the flag when toast is closed
-          });
-        }
-      }
+      console.error(err); // Handle errors as needed
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Flex align="center" justify="center" height="100vh" bgGradient="linear(to-r, #4facfe, #00f2fe)">
-      <Box p={8} maxW="md" borderWidth={1} borderRadius={8} boxShadow="lg" bg="white" width="100%">
-        <Flex direction="column" align="center">
-          <Text fontSize="2xl" mb={4} textAlign="center">
-            Register
-          </Text>
-          <FormControl isRequired>
-            <FormLabel>Username</FormLabel>
-            <Input type="text" placeholder="Username" name="username" onChange={handleChange} />
-          </FormControl>
-          <FormControl mt={2} isRequired>
-            <FormLabel>Email</FormLabel>
-            <Input type="email" placeholder="Email" name="email" onChange={handleChange} />
-          </FormControl>
-          <FormControl mt={2} isRequired>
-            <FormLabel>Password</FormLabel>
-            <Input type="password" placeholder="Password" name="password" onChange={handleChange} />
-          </FormControl>
-          <FormControl mt={2} isRequired>
-            <FormLabel>Name</FormLabel>
-            <Input type="text" placeholder="Name" name="name" onChange={handleChange} />
-          </FormControl>
-          <Box mt={4} textAlign="center">
+    <Box bgGradient="linear(to-r, #8253e0, #b542b3)">
+      <Flex h="100vh" alignItems="center" justifyContent="center">
+        <Box p={8} maxW="md" borderWidth={1} borderRadius={8} boxShadow="lg" bg="white" width="100%">
+          <Flex justifyContent="center" mb={4}>
+            <Text fontSize="xl" fontWeight="bold">
+              Socially
+            </Text>
+          </Flex>
+          <Input
+            placeholder="Username"
+            borderRadius="lg"
+            borderWidth={1}
+            borderColor="gray.300"
+            p={4}
+            mb={3}
+            name="username"
+            onChange={handleChange}
+          />
+          <Input
+            placeholder="Email"
+            borderRadius="lg"
+            borderWidth={1}
+            borderColor="gray.300"
+            p={4}
+            mb={3}
+            name="email"
+            onChange={handleChange}
+          />
+          <Input
+            placeholder="Password"
+            type="password"
+            borderRadius="lg"
+            borderWidth={1}
+            borderColor="gray.300"
+            p={4}
+            mb={3}
+            name="password"
+            onChange={handleChange}
+          />
+          <Input
+            placeholder="Name"
+            borderRadius="lg"
+            borderWidth={1}
+            borderColor="gray.300"
+            p={4}
+            mb={3}
+            name="name"
+            onChange={handleChange}
+          />
+          <Flex justifyContent="center" my="3">
             <Button
-              colorScheme="teal"
+              variant="solid"
+              borderRadius="lg"
+              bgGradient="linear(to-r, #8253e0, #b542b3)"
+              color="white"
+              p={4}
+              _hover={{ opacity: 0.8 }}
               onClick={handleClick}
               isLoading={isLoading}
+              isDisabled={isLoading}
               loadingText="Registering..."
-              mx="auto"
-              display="block"
             >
               Register
             </Button>
+          </Flex>
+          <Box position="relative" my="4">
+            <Divider borderColor="gray.500" height="10px" />
+            <AbsoluteCenter bg="white" px="4">
+              OR
+            </AbsoluteCenter>
           </Box>
-          <Box mt={4} textAlign="center">
-            <Text>
-              Have an account?{' '}
-              <ChakraLink as={Link} to="/login" color="teal.500">
-                Login
-              </ChakraLink>
+          <Flex justifyContent="center" my="3">
+            <Button
+              variant="outline"
+              borderRadius="lg"
+              borderColor="gray.300"
+              p={4}
+              mb={4}
+              _hover={{ borderColor: "#8253e0", backgroundColor: "#e8d9f1" }}
+            >
+              <Link to='auth/google'>
+                Log in with Google
+              </Link>
+            </Button>
+          </Flex>
+          <Flex justifyContent="space-between" mt={4}>
+            <Text fontSize="sm" color="gray.500">
+              <Link to="/forgot-password">Forgot password?</Link>
             </Text>
-          </Box>
-        </Flex>
-      </Box>
-    </Flex>
+            <Text fontSize="sm" color="gray.500">
+              <Link to="/login">Login</Link>
+            </Text>
+          </Flex>
+        </Box>
+      </Flex>
+    </Box>
   );
 }
 

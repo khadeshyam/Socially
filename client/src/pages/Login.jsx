@@ -1,21 +1,20 @@
-import { Box,Text, Button, FormControl, FormLabel, Input, Link as ChakraLink, Flex, useToast } from "@chakra-ui/react";
-import { useContext, useState, useEffect } from "react";
-import { AuthContext } from "../context/authContext";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useState, useEffect } from 'react';
+import { Box, Flex, Text, Input, Button, Divider, AbsoluteCenter } from '@chakra-ui/react';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/authContext';
 
 function Login() {
   const { loggin, currentUser } = useContext(AuthContext);
   const [inputs, setInputs] = useState({
-    usernameOrEmail: "",
-    password: "",
+    usernameOrEmail: '',
+    password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [msg, setMsg] = useState("");
+  const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
-  const toast = useToast();
 
   useEffect(() => {
-    currentUser && navigate("/");
+    currentUser && navigate('/');
   }, [currentUser]);
 
   const handleChange = (e) => {
@@ -26,69 +25,99 @@ function Login() {
     try {
       e.preventDefault();
       if (!inputs.usernameOrEmail || !inputs.password) {
-        throw new Error("Please fill in all the fields");
+        throw new Error('Error Please fill in all the fields');
       }
       setIsLoading(true);
       await loggin(inputs);
+      // If you want to show a success message, you can set it here
+      setMsg({type:'sucess',title:'Login successful!'});
     } catch (err) {
       const message = err.response?.data?.message || err?.message;
-      setMsg(message);
-      toast({
-        title: "Error",
-        description: message,
-        status: "error",
-        duration: 5000,
-        isClosable: true,
-        position: "top"
-      });
+      setMsg({type:'error',title:message});
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Flex
-      align="center"
-      justify="center"
-      height="100vh"
-      bgGradient="linear(to-r, #4facfe, #00f2fe)"
-    >
-      <Box p={8} maxW="md" borderWidth={1} borderRadius={8} boxShadow="lg" bg="white" width="100%">
-        <Flex direction="column" align="center">
-          <Text fontSize="2xl" mb={4}>
-            Login
-          </Text>
-          <FormControl isRequired>
-            <FormLabel>Username or Email</FormLabel>
-            <Input type="text" placeholder="Username or Email" name="usernameOrEmail" onChange={handleChange} />
-          </FormControl>
-          <FormControl mt={2} isRequired>
-            <FormLabel>Password</FormLabel>
-            <Input type="password" placeholder="Password" name="password" onChange={handleChange} />
-          </FormControl>
-          <Box mt={4} textAlign="center">
+    <Box bgGradient="linear(to-r, #8253e0, #b542b3)">
+      <Flex h="100vh" alignItems="center" justifyContent="center">
+        <Box p={8} maxW="md" borderWidth={1} borderRadius={8} boxShadow="lg" bg="white" width="100%">
+          <Flex justifyContent="center" mb={4}>
+            <Text fontSize="xl" fontWeight="bold">
+              Socially
+            </Text>
+          </Flex>
+          <Input
+            placeholder="Username, or email"
+            borderRadius="lg"
+            borderWidth={1}
+            borderColor="gray.300"
+            p={4}
+            mb={3}
+            name="usernameOrEmail"
+            onChange={handleChange}
+          />
+          <Input
+            placeholder="Password"
+            borderRadius="lg"
+            borderWidth={1}
+            borderColor="gray.300"
+            p={4}
+            mb={3}
+            type="password"
+            name="password"
+            onChange={handleChange}
+          />
+          <Flex justifyContent="center" my="3">
             <Button
-              colorScheme="teal"
+              variant="solid"
+              borderRadius="lg"
+              bgGradient="linear(to-r, #8253e0, #b542b3)"
+              color="white"
+              p={4}
+              _hover={{ opacity: 0.8 }}
               onClick={handleLogin}
               isLoading={isLoading}
               loadingText="Logging In"
-              mx="auto"
-              display="block"
             >
-              Login
+              Log in
             </Button>
+          </Flex>
+          {msg && (
+            <Box textAlign="center" color={msg.type === 'error' ? 'red' : 'green'} mt={2}>
+              {msg.title}
+            </Box>
+          )}
+          <Box position="relative" my="4">
+            <Divider borderColor="gray.500" height="10px" />
+            <AbsoluteCenter bg="white" px="4">
+              OR
+            </AbsoluteCenter>
           </Box>
-          <Box mt={2}>
-            <Text>
-              Don't have an account?{" "}
-              <ChakraLink as={Link} to="/register" color="teal.500">
-                Register
-              </ChakraLink>
+          <Flex justifyContent="center" my="3">
+            <Button
+              variant="outline"
+              borderRadius="lg"
+              borderColor="gray.300"
+              p={4}
+              mb={4}
+              _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
+            >
+              <Link to="auth/google">Log in with Google</Link>
+            </Button>
+          </Flex>
+          <Flex justifyContent="space-between" mt={4}>
+            <Text fontSize="sm" color="gray.500">
+              <Link to="/forgot-password">Forgot password?</Link>
             </Text>
-          </Box>
-        </Flex>
-      </Box>
-    </Flex>
+            <Text fontSize="sm" color="gray.500">
+              <Link to="/register">Register</Link>
+            </Text>
+          </Flex>
+        </Box>
+      </Flex>
+    </Box>
   );
 }
 
