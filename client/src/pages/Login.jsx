@@ -25,15 +25,15 @@ function Login() {
     try {
       e.preventDefault();
       if (!inputs.usernameOrEmail || !inputs.password) {
-        throw new Error('Error Please fill in all the fields');
+        throw new Error('Fill in all the fields');
       }
       setIsLoading(true);
       await loggin(inputs);
       // If you want to show a success message, you can set it here
-      setMsg({type:'sucess',title:'Login successful!'});
+      setMsg({ type: 'sucess', title: 'Login successful!' });
     } catch (err) {
       const message = err.response?.data?.message || err?.message;
-      setMsg({type:'error',title:message});
+      setMsg({ type: 'error', title: message });
     } finally {
       setIsLoading(false);
     }
@@ -84,11 +84,7 @@ function Login() {
               Log in
             </Button>
           </Flex>
-          {msg && (
-            <Box textAlign="center" color={msg.type === 'error' ? 'red' : 'green'} mt={2}>
-              {msg.title}
-            </Box>
-          )}
+
           <Box position="relative" my="4">
             <Divider borderColor="gray.500" height="10px" />
             <AbsoluteCenter bg="white" px="4">
@@ -104,9 +100,13 @@ function Login() {
               mb={4}
               _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
             >
-              <Link to="auth/google">Log in with Google</Link>
+              <Link to="/comingsoon">Continue with Google</Link>
             </Button>
           </Flex>
+          {msg && <Box textAlign="center" color={msg?.type === 'error' ? 'red' : 'green'} mt={2}>
+            {msg?.title}
+          </Box>
+          }
           <Flex justifyContent="space-between" mt={4}>
             <Text fontSize="sm" color="gray.500">
               <Link to="/forgot-password">Forgot password?</Link>

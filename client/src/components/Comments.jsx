@@ -55,7 +55,7 @@ const Comments = ({ postId }) => {
   return (
     <Box className="comments">
       <Flex className="write" alignItems="center" justifyContent="space-between" gap={4} margin="20px 0px">
-        <Image src={currentUser.profilePic} alt="" boxSize="40px" borderRadius="50%" objectFit="cover" />
+        <Image src={currentUser?.profilePic} alt="" boxSize="40px" borderRadius="50%" objectFit="cover" />
         <Input
           type="text"
           placeholder="write a comment"

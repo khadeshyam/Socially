@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Flex, Text, Input, Button, Divider, AbsoluteCenter } from '@chakra-ui/react';
+import { Box, Flex, Text, Input, Button, Divider, AbsoluteCenter, Spinner } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { makeRequest } from '../axios';
 
@@ -11,6 +11,7 @@ function Register() {
     name: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [msg, setMsg] = useState(null); // for error messages
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,6 +22,7 @@ function Register() {
     e.preventDefault();
     try {
       setIsLoading(true);
+      setMsg(null); // Clear previous error messages
       if (!inputs.username || !inputs.email || !inputs.password || !inputs.name) {
         throw new Error('Please fill all the fields');
       }
@@ -28,7 +30,8 @@ function Register() {
       setInputs({ username: '', email: '', password: '', name: '' });
       navigate('/login');
     } catch (err) {
-      console.error(err); // Handle errors as needed
+      const message = err.response?.data?.message || err?.message;
+      setMsg({ type: 'error', title: message });
     } finally {
       setIsLoading(false);
     }
@@ -95,7 +98,11 @@ function Register() {
               onClick={handleClick}
               isLoading={isLoading}
               isDisabled={isLoading}
-              loadingText="Registering..."
+              loadingText={
+                <Flex align="center">
+                  Registering...
+                </Flex>
+              }
             >
               Register
             </Button>
@@ -113,13 +120,17 @@ function Register() {
               borderColor="gray.300"
               p={4}
               mb={4}
-              _hover={{ borderColor: "#8253e0", backgroundColor: "#e8d9f1" }}
+              _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
             >
-              <Link to='auth/google'>
-                Log in with Google
+              <Link to='/comingsoon'>
+                Continue with Google
               </Link>
             </Button>
           </Flex>
+          {msg && <Box textAlign="center" color={msg?.type === 'error' ? 'red' : 'green'}>
+            {msg?.title}
+          </Box>
+          }
           <Flex justifyContent="space-between" mt={4}>
             <Text fontSize="sm" color="gray.500">
               <Link to="/forgot-password">Forgot password?</Link>
@@ -130,6 +141,8 @@ function Register() {
           </Flex>
         </Box>
       </Flex>
+
+
     </Box>
   );
 }

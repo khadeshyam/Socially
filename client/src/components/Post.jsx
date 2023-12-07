@@ -16,27 +16,27 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from '../axios';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import moment from 'moment';
 import Comments from './Comments';
 
-const Post = ({ post }) => {
-  const [commentOpen, setCommentOpen] = useState(false);
+const Post = ({ post,isCommentOpen,id }) => {
+  const [commentOpen, setCommentOpen] = useState(isCommentOpen?true:false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
   const { isLoading, error, data } = useQuery({
-    queryKey: ['likes', post.id],
+    queryKey: ['likes', post?.id],
     queryFn: () =>
-      makeRequest.get('/likes?postId=' + post.id).then((res) => res.data),
+      makeRequest.get('/likes?postId=' + post?.id).then((res) => res.data),
   });
 
   const queryClient = useQueryClient();
   const mutation = useMutation(
     (liked) => {
-      if (liked) return makeRequest.delete('/likes?postId=' + post.id);
-      return makeRequest.post('/likes', { postId: post.id });
+      if (liked) return makeRequest.delete('/likes?postId=' + post?.id);
+      return makeRequest.post('/likes', { postId: post?.id });
     },
     {
       onSuccess: () => {
@@ -62,26 +62,33 @@ const Post = ({ post }) => {
   };
 
   const handleDelete = async () => {
-    deleteMutation.mutate(post.id);
+    deleteMutation.mutate(post?.id);
   };
+
+  const renderLikeIcon = () => {
+    if(!isLoading && data?.includes(currentUser?.id)) {
+      return <FavoriteOutlinedIcon style={{ color: 'red' }} />
+    }
+    return <FavoriteBorderOutlinedIcon />
+  }
 
   return (
     <Box boxShadow="lg" borderRadius="lg" bgColor="gray.100" color="gray.800">
       <Flex align="center" justify="space-between" p="4">
         <Flex align="center">
           <Image
-            src={post.userProfilePic}
+            src={post?.userProfilePic}
             borderRadius="full"
             boxSize="40px"
             objectFit="cover"
             mr="4"
           />
           <Box>
-            <Link to={{ pathname: `/profile/${post.userId}` }}>
-              <Text fontWeight="500">{post.userName}</Text>
+            <Link to={{ pathname: `/profile/${post?.userId}` }}>
+              <Text fontWeight="500">{post?.userName}</Text>
             </Link>
             <Text fontSize="sm" color="gray.500">
-              {moment(post.createdAt).fromNow()}
+              {moment(post?.createdAt).fromNow()}
             </Text>
           </Box>
         </Flex>
@@ -89,16 +96,16 @@ const Post = ({ post }) => {
           icon={<MoreHorizIcon />}
           onClick={() => setMenuOpen(!menuOpen)}
         />
-        {menuOpen && post.userId === currentUser?.id && (
+        {menuOpen && post?.userId === currentUser?.id && (
           <Button onClick={handleDelete}>Delete</Button>
         )}
       </Flex>
       <Box p="4">
-        <Text>{post.desc}</Text>
-        <Box className="wireframe">
+        <Text>{post?.desc}</Text>
+        <Box >
           <LazyLoadImage
             effect="blur"
-            src={post.img}
+            src={post?.img}
             alt=""
             boxSize="100%"
             maxH="420px"
@@ -109,28 +116,26 @@ const Post = ({ post }) => {
       </Box>
       <Flex justify="space-between" p="4">
         <Flex align="center" gap="4" onClick={handleLike} cursor="pointer">
-          {isLoading ? 'loading' : data?.includes(currentUser?.id) ? (
-            <FavoriteOutlinedIcon style={{ color: 'red' }} />
-          ) : (
-            <FavoriteBorderOutlinedIcon />
-          )}
+          {renderLikeIcon()}
           <Text>{data?.length} Likes</Text>
         </Flex>
         <Flex
           align="center"
           gap="4"
-          onClick={() => setCommentOpen(!commentOpen)}
           cursor="pointer"
-        >
+          onClick={() => setCommentOpen(!commentOpen)}
+        > 
+        {/* <Link to='comment/123'> */}
           <TextsmsOutlinedIcon />
           <Text>Comments</Text>
+        {/* </Link> */}
         </Flex>
         <Flex align="center" gap="4">
           <ShareOutlinedIcon />
           <Text>Share</Text>
         </Flex>
       </Flex>
-      {commentOpen && <Comments postId={post.id} />}
+      {commentOpen && <Comments postId={post?.id} />}
     </Box>
   );
 };

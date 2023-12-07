@@ -1,5 +1,7 @@
+// RightBar.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Flex, Image, Text, Button } from '@chakra-ui/react';
+import { Box, Flex, Text } from '@chakra-ui/react';
+import SuggestionItem from './SuggestionItem';
 
 const RightBar = () => {
   const [scrollRightY, setScrollRightY] = useState(0);
@@ -29,14 +31,14 @@ const RightBar = () => {
 
   return (
     <Box
-      className="rightbar"
       flex="3"
       position="sticky"
-      top="60px"
+      top="0"
       height="calc(100vh - 60px)"
       overflow="scroll"
-      bgColor="gray.100"
-      color="gray.800"
+      bgColor="white"
+      color="black"
+      borderLeft="1px solid #dbdbdb" // Instagram's right bar has a border on the left
       sx={{
         '&::-webkit-scrollbar': {
           display: 'none',
@@ -48,33 +50,15 @@ const RightBar = () => {
       ref={myRef}
     >
       <Flex direction="column" padding="16px">
-        <Box boxShadow="lg" padding="16px" marginBottom="20px" bgColor="gray.200">
-          <Text color="gray">Suggestions For You</Text>
-          <Flex align="center" justify="space-between" margin="20px 0">
-            <Flex align="center">
-              <Image
-                src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-                alt=""
-                borderRadius="50%"
-                boxSize="30px" // Adjusted image size
-                objectFit="cover"
-              />
-              <Text fontWeight="500" marginLeft="20px">
-                Shyam
-              </Text>
-            </Flex>
-            <Flex>
-              <Button backgroundColor="#5271ff" padding="5px" color="white" cursor="pointer">
-                Follow
-              </Button>
-              <Button backgroundColor="#f0544f" padding="5px" color="white" cursor="pointer">
-                Dismiss
-              </Button>
-            </Flex>
-          </Flex>
-
+        {/* Instagram-like styling */}
+        <Box boxShadow="sm" padding="16px" marginBottom="20px" bgColor="white">
+          <Text fontWeight="bold" fontSize="18px" marginBottom="10px">
+            Suggestions For You
+          </Text>
+          {[1, 2, 3, 4, 5].map((index) => (
+            <SuggestionItem key={index} username={`Shyam ${index}`} />
+          ))}
         </Box>
-       
       </Flex>
     </Box>
   );
