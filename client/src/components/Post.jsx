@@ -21,8 +21,8 @@ import { AuthContext } from '../context/authContext';
 import moment from 'moment';
 import Comments from './Comments';
 
-const Post = ({ post,isCommentOpen,id }) => {
-  const [commentOpen, setCommentOpen] = useState(isCommentOpen?true:false);
+const Post = ({ post, isCommentOpen, id }) => {
+  const [commentOpen, setCommentOpen] = useState(isCommentOpen ? true : false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
 
@@ -66,14 +66,14 @@ const Post = ({ post,isCommentOpen,id }) => {
   };
 
   const renderLikeIcon = () => {
-    if(!isLoading && data?.includes(currentUser?.id)) {
-      return <FavoriteOutlinedIcon style={{ color: 'red' }} />
+    if (!isLoading && data?.includes(currentUser?.id)) {
+      return <FavoriteOutlinedIcon style={{ color: '#ff6262' }} />;
     }
-    return <FavoriteBorderOutlinedIcon />
-  }
+    return <FavoriteBorderOutlinedIcon />;
+  };
 
   return (
-    <Box boxShadow="lg" borderRadius="lg" bgColor="gray.100" color="gray.800">
+    <Box borderRadius="lg" border="1px solid #dcdcdc" bgColor="white" color="black" margin="20px" padding="20px">
       <Flex align="center" justify="space-between" p="4">
         <Flex align="center">
           <Image
@@ -95,6 +95,7 @@ const Post = ({ post,isCommentOpen,id }) => {
         <IconButton
           icon={<MoreHorizIcon />}
           onClick={() => setMenuOpen(!menuOpen)}
+          background="transparent" _hover={{ bg: 'transparent' }}
         />
         {menuOpen && post?.userId === currentUser?.id && (
           <Button onClick={handleDelete}>Delete</Button>
@@ -102,7 +103,7 @@ const Post = ({ post,isCommentOpen,id }) => {
       </Flex>
       <Box p="4">
         <Text>{post?.desc}</Text>
-        <Box >
+        <Box>
           <LazyLoadImage
             effect="blur"
             src={post?.img}
@@ -124,11 +125,9 @@ const Post = ({ post,isCommentOpen,id }) => {
           gap="4"
           cursor="pointer"
           onClick={() => setCommentOpen(!commentOpen)}
-        > 
-        {/* <Link to='comment/123'> */}
+        >
           <TextsmsOutlinedIcon />
           <Text>Comments</Text>
-        {/* </Link> */}
         </Flex>
         <Flex align="center" gap="4">
           <ShareOutlinedIcon />

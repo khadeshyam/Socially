@@ -1,7 +1,7 @@
 import React from 'react';
 import Post from './Post';
 import { useQuery } from '@tanstack/react-query';
-import { Box } from '@chakra-ui/react';
+import { Box, Spinner } from '@chakra-ui/react';
 import { makeRequest } from '../axios';
 
 const Posts = ({ userId }) => {
@@ -14,8 +14,14 @@ const Posts = ({ userId }) => {
   });
 
   return (
-    <Box className="posts" display="flex" flexDirection="column" gap="20px">
-      {isLoading ? 'Loading' : data?.map((post) => <Post post={post} key={post?.id} />)}
+    <Box display="flex" flexDirection="column" gap="20px" height="100vh">
+      {isLoading ? (
+        <Box display="flex" justifyContent="center" alignItems="center" height={20} mt = {8}>
+          <Spinner size="lg" color="brand.primary" />
+        </Box>
+      ) : (
+        data?.map((post) => <Post post={post} key={post?.id} />)
+      )}
     </Box>
   );
 };

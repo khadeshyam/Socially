@@ -1,15 +1,17 @@
+import React, { useContext, useState } from 'react';
 import {
   Box,
   Flex,
   Image,
   Input,
-  Button,
   Text,
+  Textarea,
+  Button,
+  Divider
 } from '@chakra-ui/react';
 import ImageIcon from '../assets/img.png';
 import MapIcon from '../assets/map.png';
 import FriendIcon from '../assets/friend.png';
-import { useContext, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -17,19 +19,16 @@ import { makeRequest } from '../axios';
 
 const Share = () => {
   const { currentUser } = useContext(AuthContext);
-
   const [desc, setDesc] = useState('');
   const [file, setFile] = useState(null);
   const [isLoading, setLoading] = useState(false);
+  const queryClient = useQueryClient();
 
   const uploadToCloudinary = async () => {
     try {
       const data = new FormData();
       data.append('file', file);
-      data.append(
-        'upload_preset',
-        process.env.REACT_APP_UPLOAD_PRESET_NAME
-      );
+      data.append('upload_preset', process.env.REACT_APP_UPLOAD_PRESET_NAME);
       data.append('cloud_name', process.env.REACT_APP_CLOUD_NAME);
       const response = await axios.post(
         `https://api.cloudinary.com/v1_1/${process.env.REACT_APP_CLOUD_NAME}/image/upload`,
@@ -37,20 +36,14 @@ const Share = () => {
       );
       return response?.data?.url;
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
-  const queryClient = useQueryClient();
-
   const mutation = useMutation(
-    (newPost) => {
-      return makeRequest.post('/posts', newPost);
-    },
+    (newPost) => makeRequest.post('/posts', newPost),
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries('posts');
-      },
+      onSuccess: () => queryClient.invalidateQueries('posts'),
     }
   );
 
@@ -63,7 +56,7 @@ const Share = () => {
       setDesc('');
       setFile(null);
     } catch (error) {
-      console.log(error);
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -73,11 +66,14 @@ const Share = () => {
     <Box
       boxShadow="lg"
       borderRadius="lg"
-      bgColor="gray.100"
-      color="gray.800"
+      bgColor="white"
+      color="black"
       marginBottom="20px"
+      border="1px solid #dbdbdb"
+      margin="20px" 
+      padding="20px"
     >
-      <Flex align="center" justify="space-between" p="4">
+      <Flex align="center" justify="space-between" >
         <Flex align="center" gap="20px" flex="3">
           <Image
             src={currentUser?.profilePic}
@@ -85,17 +81,23 @@ const Share = () => {
             boxSize="40px"
             objectFit="cover"
           />
-          <Input
-            type="text"
-            placeholder={`What's on your mind, ${currentUser?.name}?`}
-            onChange={(e) => setDesc(e.target.value)}
+          <Textarea
             value={desc}
-            border="none"
+            onChange={(e) => setDesc(e.target.value)}
+            resize="none"
+            placeholder={`What's on your mind, ${currentUser?.username}?`}
             outline="none"
             padding="20px 10px"
             backgroundColor="transparent"
-            width="60%"
-            color="gray.800"
+            width="100%"
+            color="black"
+            height="80px"
+            borderRadius="5px" 
+            overflow="hidden"
+            borderColor='gray.500'
+            _focus={{
+              borderColor: 'gray.500', // Set the border color when the input is focused
+            }}
           />
         </Flex>
         <Flex flex="1" justify="flex-end">
@@ -112,16 +114,18 @@ const Share = () => {
           )}
         </Flex>
       </Flex>
-      <hr />
-      <Flex align="center" justify="space-between" p="4">
+       <Divider mt={2}/>
+      <Flex align="center" justify="space-between" mt={2}>
         <Flex align="center" gap="20px">
           <label htmlFor="file">
-            <Flex
-              align="center"
-              gap="10px"
-              cursor="pointer"
-              className="item"
-            >
+            <Input
+              type="file"
+              accept="image/*"
+              id="file"
+              style={{ display: 'none' }}
+              onChange={(e) => setFile(e.target.files[0])}
+            />
+            <Flex align="center" gap="10px" cursor="pointer" className="item">
               <Image src={ImageIcon} alt="" height="20px" />
               <Text fontSize="12px" color="gray">
                 Add Image
@@ -146,7 +150,7 @@ const Share = () => {
             onClick={handleClick}
             disabled={isLoading}
             border="none"
-            padding="5px"
+            padding="10px"
             color="white"
             cursor="pointer"
             backgroundColor="#5271ff"
