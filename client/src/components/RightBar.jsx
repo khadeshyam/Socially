@@ -38,7 +38,7 @@ const RightBar = () => {
       overflow="scroll"
       bgColor="white"
       color="black"
-      borderLeft="1px solid #dbdbdb" // Instagram's right bar has a border on the left
+      borderLeft="1px solid #dcdcdc" // Instagram's right bar has a border on the left
       sx={{
         '&::-webkit-scrollbar': {
           display: 'none',
@@ -50,7 +50,6 @@ const RightBar = () => {
       ref={myRef}
     >
       <Flex direction="column" padding="16px">
-        {/* Instagram-like styling */}
         <Box boxShadow="sm" padding="16px" marginBottom="20px" bgColor="white">
           <Text fontWeight="bold" fontSize="18px" marginBottom="10px">
             Suggestions For You

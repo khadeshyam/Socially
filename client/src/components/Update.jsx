@@ -31,8 +31,8 @@ const Update = ({ setOpenUpdate, user }) => {
   };
 
   const handleChange = (e) => {
-    setInputs(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  }
+    setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e) => {
     try {
@@ -40,43 +40,42 @@ const Update = ({ setOpenUpdate, user }) => {
       let coverUrl = user.coverPic;
       let profileUrl = user.profilePic;
 
-      coverUrl = coverPic && await uploadToCloudinary(coverPic);
-      profileUrl = profilePic && await uploadToCloudinary(profilePic);
+      coverUrl = coverPic && (await uploadToCloudinary(coverPic));
+      profileUrl = profilePic && (await uploadToCloudinary(profilePic));
       mutation.mutate({ ...inputs, coverPic: coverUrl, profilePic: profileUrl });
       setOpenUpdate(false);
-      
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
   return (
     <Modal isOpen={true} onClose={() => setOpenUpdate(false)}>
       <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Update</ModalHeader>
+      <ModalContent >
+        <ModalHeader >Update</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form>
             <FormControl>
               <FormLabel>Cover Photo</FormLabel>
-              <Input type='file' onChange={(e) => setCoverPic(e.target.files[0])} />
+              <Input type="file" onChange={(e) => setCoverPic(e.target.files[0])} />
             </FormControl>
             <FormControl>
               <FormLabel>Profile Photo</FormLabel>
-              <Input type='file' onChange={(e) => setProfilePic(e.target.files[0])} />
+              <Input type="file" onChange={(e) => setProfilePic(e.target.files[0])} />
             </FormControl>
             <FormControl>
               <FormLabel>Name</FormLabel>
-              <Input type='text' name="name" onChange={handleChange} />
+              <Input type="text" name="name" onChange={handleChange} />
             </FormControl>
             <FormControl>
               <FormLabel>City</FormLabel>
-              <Input type='text' name="city" onChange={handleChange} />
+              <Input type="text" name="city" onChange={handleChange} />
             </FormControl>
             <FormControl>
               <FormLabel>Website</FormLabel>
-              <Input type='text' name="website" onChange={handleChange} />
+              <Input type="text" name="website" onChange={handleChange} />
             </FormControl>
           </form>
         </ModalBody>
@@ -84,11 +83,10 @@ const Update = ({ setOpenUpdate, user }) => {
           <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
             Update
           </Button>
-          <Button onClick={() => setOpenUpdate(false)}>Close</Button>
         </ModalFooter>
       </ModalContent>
     </Modal>
-  )
-}
+  );
+};
 
 export default Update;

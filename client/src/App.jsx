@@ -1,6 +1,4 @@
 import React from "react";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -9,14 +7,17 @@ import {
 import { useContext } from "react";
 import LeftBar from "./components/LeftBar";
 import RightBar from "./components/RightBar";
+import Post from "./components/Post";
+import Posts from "./components/Posts";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import ComingSoon from "./pages/CommingSoon";
 import VerifyMail from "./pages/VerifyMail";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import { Box } from "@chakra-ui/react";
 import { AuthContext } from './context/authContext';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import Post from "./components/Post";
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
@@ -73,6 +74,14 @@ const App = () => {
         {
           path: "/comment/:id",
           element: <Post isCommentOpen={true} />,
+        },
+        {
+          path: "/profile:id",
+          element: <Post isCommentOpen={true} />,
+        }, 
+        {
+          path: "/feed",
+          element: <Posts/>,
         }, {
           path: "/*",
           element: <ComingSoon />,

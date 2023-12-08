@@ -15,12 +15,12 @@ import {
 import { Link } from 'react-router-dom';
 
 const Leftbar = () => {
-  const { colorMode, toggleColorMode } = useColorMode();
+  //const { colorMode, toggleColorMode } = useColorMode();
 
   return (
     <Box 
-    bg={colorMode === 'light' ? 'white' : 'black'} // Set background color based on the color mode
-    color={colorMode === 'light' ? 'black' : 'white'} // Set text color based on the color mode
+    bg={'white' } // Set background color based on the color mode
+    color={ 'black'} // Set text color based on the color mode
 
        h="100vh" 
        p={4} 
@@ -34,7 +34,7 @@ const Leftbar = () => {
          bottom: 0,
          right: 0,
          width: "1px",
-         background: "gray.400"
+         background: "#dcdcdc"
        }}
     >
       <VStack spacing={2} align="stretch">
@@ -47,14 +47,14 @@ const Leftbar = () => {
         </Flex>
 
         <Link to="/profile">
-          <HStack w="100%" p={2} borderRadius="8px">
-            <IconButton icon={<Home fontSize='medium' />} aria-label="Home" background="transparent"  />
+          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
+            <IconButton icon={<Home fontSize='medium' />} aria-label="Home" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Home</Text>
           </HStack>
         </Link>
 
         <Link to="/search">
-          <HStack w="100%" p={2} borderRadius="8px">
+          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
             <IconButton icon={<Search fontSize='medium' />} aria-label="Home" background="transparent"  />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Search</Text>
           </HStack>
@@ -65,44 +65,44 @@ const Leftbar = () => {
           <Text fontSize="sm" fontWeight="bold" ml={2}>Reels</Text>
         </HStack> */}
 
-        <Link to="/explore">
-          <HStack w="100%" p={2} borderRadius="8px" >
-            <IconButton icon={<Explore fontSize='medium' />} aria-label="Explore" background="transparent"  />
-            <Text fontSize="sm" fontWeight="bold" ml={2}>Explore</Text>
+        <Link to="/feed">
+          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" >
+            <IconButton icon={<Explore fontSize='medium' />} aria-label="Explore" background="transparent" _hover={{ bg: 'transparent' }} />
+            <Text fontSize="sm" fontWeight="bold" ml={2}>Feed</Text>
           </HStack>
         </Link>
 
         <Link to="/favorites">
-          <HStack w="100%" p={2} borderRadius="8px" >
-            <IconButton icon={<FavoriteBorder fontSize='medium' />} aria-label="Favorites" background="transparent"  />
+          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" >
+            <IconButton icon={<FavoriteBorder fontSize='medium' />} aria-label="Favorites" background="transparent"  _hover={{ bg: 'transparent' }}/>
             <Text fontSize="sm" fontWeight="bold" ml={2}>Favorites</Text>
           </HStack>
         </Link>
 
-        <Link to="/profile">
-          <HStack w="100%" p={2} borderRadius="8px" >
-            <IconButton icon={<Person fontSize='medium' />} aria-label="Profile" background="transparent"  />
+        <Link to="/profile/123">
+          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" >
+            <IconButton icon={<Person fontSize='medium' />} aria-label="Profile" background="transparent"  _hover={{ bg: 'transparent' }}/>
             <Text fontSize="sm" fontWeight="bold" ml={2}>Profile</Text>
           </HStack>
         </Link>
         <Link to="/settings">
-          <HStack w="100%" p={2} borderRadius="8px">
-            <IconButton icon={<SettingsApplications fontSize='medium' />} aria-label="Settings" background="transparent"  />
+          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
+            <IconButton icon={<SettingsApplications fontSize='medium' />} aria-label="Settings" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Settings</Text>
           </HStack>
         </Link>
         <Link to="/menu">
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
-            <IconButton icon={<Menu />} aria-label="Menu" background="transparent"  />
+            <IconButton icon={<Menu />} aria-label="Menu" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Menu</Text>
           </HStack>
         </Link>
-        <IconButton
+        {/* <IconButton
           icon={colorMode === 'light' ? <DarkMode/> : <LightMode />}
           aria-label="Toggle Dark Mode"
           onClick={toggleColorMode}
           ml={2}
-        />
+        /> */}
 
 
 
