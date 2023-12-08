@@ -42,7 +42,7 @@ const SuggestionItem = ({ username }) => {
           _hover={{ background: 'transparent' }}
           onClick={handleFollowToggle}
         >
-          {isFollowing ? 'UnFollow' : 'Follow'}
+          {isFollowing ? 'Unfollow' : 'Follow'}
         </Button>
       </Flex>
     </Flex>

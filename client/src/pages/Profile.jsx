@@ -5,7 +5,7 @@ import {
   Link,
   Text,
   Button,
-  Circle,
+  Avatar,
   IconButton,
 } from "@chakra-ui/react";
 import FacebookTwoToneIcon from "@mui/icons-material/FacebookTwoTone";
@@ -61,30 +61,26 @@ const Profile = () => {
         className="profile"
         p={{ base: "10px", md: "20px" }}
       >
-        <Flex className="images" direction={{ base: "column", md: "row" }}>
-          <Image
-            src={data?.coverPic || "https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"}
+        <Flex position="relative">
+        <Image
+            src={data?.coverPic || "https://images.pexels.com/photos/259915/pexels-photo-259915.jpeg"}
             alt=""
-            className="cover"
             w="100%"
-            h={{ base: "300px", md: "100%" }}
-            objectFit="cover"
+            h="200px"
+            objectFit="fill"
           />
-          <Circle
-            src={data?.profilePic || "https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg?auto=compress&cs=tinysrgb&w=1600&lazy=load"}
+          <Avatar
+            src={data?.profilePic || "https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg"}
             alt=""
-            className="profilePic"
-            size="200px"
-            borderRadius="full"
-            objectFit="cover"
+            name="Shyam Khade"
+            size="xl"  // Adjust the size as needed
             position="absolute"
-            left="0"
-            right="0"
-            margin="auto"
-            top="200px"
+            top="50%"
+            left="50%"
+            transform="translateX(-50%)"
           />
         </Flex>
-        <Flex className="profileContainer" direction="column" padding={{ base: "10px", md: "20px" }}>
+        <Flex direction="column" padding={{ base: "10px", md: "20px" }}>
           <Flex
             className="uInfo"
             h={{ base: "30vh", md: "180px" }}
@@ -98,20 +94,6 @@ const Profile = () => {
             marginBottom="20px"
             flexDirection={{ base: "column", md: "row" }}
           >
-            <Flex className="left" flex={{ base: "1", md: "unset" }} gap="10px" flexWrap={{ md: "wrap" }}>
-              <Link href="http://facebook.com" color="brand.textColorSoft">
-                <FacebookTwoToneIcon fontSize="large" />
-              </Link>
-              <Link href="http://facebook.com" color="brand.textColorSoft">
-                <InstagramIcon fontSize="large" />
-              </Link>
-              <Link href="http://facebook.com" color="brand.textColorSoft">
-                <TwitterIcon fontSize="large" />
-              </Link>
-              <Link href="http://facebook.com" color="brand.textColorSoft">
-                <LinkedInIcon fontSize="large" />
-              </Link>
-            </Flex>
             <Flex className="center" flex="1" direction="column" alignItems="center" gap="10px">
               <Text>{data?.username}</Text>
               <Flex className="info" w="100%" justifyContent="space-around">
@@ -124,7 +106,7 @@ const Profile = () => {
                   <Text fontSize="12px">{data?.website}</Text>
                 </Flex>
               </Flex>
-              {userId === currentUser?.id ? (
+              {!(userId === currentUser?.id) ? (
                 <Button onClick={() => setOpenUpdate(true)}>update</Button>
               ) : (
                 <Button onClick={handleFollow}>
