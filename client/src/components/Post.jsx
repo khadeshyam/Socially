@@ -25,6 +25,7 @@ const Post = ({ post, isCommentOpen, id }) => {
   const [commentOpen, setCommentOpen] = useState(isCommentOpen ? true : false);
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
+  const queryClient = useQueryClient();
 
   const { isLoading, error, data } = useQuery({
     queryKey: ['likes', post?.id],
@@ -32,15 +33,29 @@ const Post = ({ post, isCommentOpen, id }) => {
       makeRequest.get('/likes?postId=' + post?.id).then((res) => res.data),
   });
 
-  const queryClient = useQueryClient();
-  const mutation = useMutation(
+  const likeMutation = useMutation(
     (liked) => {
       if (liked) return makeRequest.delete('/likes?postId=' + post?.id);
       return makeRequest.post('/likes', { postId: post?.id });
     },
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries('likes');
+      onMutate: (liked) => {
+        // Optimistically update the UI
+        queryClient.setQueryData(['likes', post?.id], (oldData) => {
+          if (liked) {
+            return oldData.filter((id) => id !== currentUser?.id);
+          } else {
+            return [...oldData, currentUser?.id];
+          }
+        });
+      },
+      onError: (error, liked, context) => {
+        // Rollback the UI changes if the API request fails
+        queryClient.setQueryData(['likes', post?.id], context.oldData);
+      },
+      onSettled: () => {
+        // Refetch the likes after the mutation completes
+        queryClient.invalidateQueries(['likes', post?.id]);
       },
     }
   );
@@ -58,7 +73,7 @@ const Post = ({ post, isCommentOpen, id }) => {
   );
 
   const handleLike = async () => {
-    mutation.mutate(data?.includes(currentUser?.id));
+    likeMutation.mutate(data?.includes(currentUser?.id));
   };
 
   const handleDelete = async () => {
