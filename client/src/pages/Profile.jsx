@@ -97,11 +97,11 @@ const Profile = () => {
             <Flex className="center" flex="1" direction="column" alignItems="center" gap="10px">
               <Text>{data?.username}</Text>
               <Flex className="info" w="100%" justifyContent="space-around">
-                <Flex className="item" alignItems="center" gap="5px" color="brand.textColorSoft">
+                <Flex className="item" alignItems="center" gap="5px" >
                   <PlaceIcon />
                   <Text fontSize="12px">{data?.city}</Text>
                 </Flex>
-                <Flex className="item" alignItems="center" gap="5px" color="brand.textColorSoft">
+                <Flex className="item" alignItems="center" gap="5px">
                   <LanguageIcon />
                   <Text fontSize="12px">{data?.website}</Text>
                 </Flex>
@@ -114,14 +114,8 @@ const Profile = () => {
                 </Button>
               )}
             </Flex>
-            <Flex className="right" flex={{ base: "1", md: "unset" }} alignItems="center" justifyContent="flex-end" gap="10px">
+            <Flex flex={{ base: "1", md: "unset" }} alignItems="center" justifyContent="flex-end" gap="10px">
               <EmailOutlinedIcon />
-              <IconButton
-                aria-label="More options"
-                icon={<MoreVertIcon />}
-                colorScheme="brand"
-                variant="outline"
-              />
             </Flex>
           </Flex>
           <Posts userId={userId} />

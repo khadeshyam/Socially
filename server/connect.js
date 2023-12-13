@@ -18,7 +18,7 @@ db.connect((err) => {
 });
 
 
-export  const initDb = async () => {
+export const initDb = async () => {
   db.execute(`CREATE DATABASE IF NOT EXISTS social`)
 
   db.query(`USE social`);

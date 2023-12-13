@@ -80,7 +80,7 @@ const Update = ({ setOpenUpdate, user }) => {
           </form>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" mr={3} onClick={handleSubmit}>
+          <Button colorScheme="blue" backgroundColor="#0095f6" mr={3} onClick={handleSubmit}>
             Update
           </Button>
         </ModalFooter>

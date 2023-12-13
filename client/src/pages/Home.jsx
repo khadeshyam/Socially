@@ -10,12 +10,12 @@ function Home() {
     >
       <Share />
       {/* <Stories /> */}
-      {/* <Posts /> */}
+      <Posts />
+      {/* <Post />
       <Post />
       <Post />
       <Post />
-      <Post />
-      <Post />
+      <Post /> */}
     </Box>
   );
 }

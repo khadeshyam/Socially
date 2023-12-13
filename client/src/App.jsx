@@ -1,10 +1,10 @@
-import React from "react";
+import React,{useContext} from "react";
 import {
   RouterProvider,
   createBrowserRouter,
-  Outlet
+  Outlet,
+  Navigate
 } from "react-router-dom";
-import { useContext } from "react";
 import LeftBar from "./components/LeftBar";
 import RightBar from "./components/RightBar";
 import Post from "./components/Post";
@@ -44,9 +44,9 @@ const App = () => {
   };
 
   const ProtectedRoute = ({ children }) => {
-    // if (!currentUser) {
-    //   return <Navigate to="/login" />;
-    // }
+    if (!currentUser) {
+      return <Navigate to="/login" />;
+    }
     return children;
   };
 
