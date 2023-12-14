@@ -130,7 +130,7 @@ const Post = ({ post, isCommentOpen }) => {
         )}
       </Flex>
       <Box p="4">
-        <Text>{post?.desc}</Text>
+        <Text mt={4} mb={4}>{post?.desc}</Text>
         <Box>
           <LazyLoadImage
             effect="blur"
