@@ -1,14 +1,12 @@
 // Sidebar.js
 import React from 'react';
-import { Box, HStack, VStack, IconButton, Text, Flex,useColorMode } from '@chakra-ui/react';
+import { Box, HStack, VStack, IconButton, Text, Flex, useColorMode } from '@chakra-ui/react';
 import {
   Home,
   Explore,
   FavoriteBorder,
   Search,
   Person,
-  DarkMode,
-  LightMode,
   Menu,
   SettingsApplications
 } from '@mui/icons-material';
@@ -18,24 +16,23 @@ const Leftbar = () => {
   //const { colorMode, toggleColorMode } = useColorMode();
 
   return (
-    <Box 
-    bg={'white' } // Set background color based on the color mode
-    color={ 'black'} // Set text color based on the color mode
-
-       h="100vh" 
-       p={4} 
-       w="100%" 
-       position="sticky"
-       top="0"
-       _after={{
-         content: '""',
-         position: "absolute",
-         top: 0,
-         bottom: 0,
-         right: 0,
-         width: "1px",
-         background: "#dcdcdc"
-       }}
+    <Box
+      bg={'white'} // Set background color based on the color mode
+      color={'black'} // Set text color based on the color mode
+      h="100vh"
+      p={4}
+      w="100%"
+      position="sticky"
+      top="0"
+      _after={{
+        content: '""',
+        position: "absolute",
+        top: 0,
+        bottom: 0,
+        right: 0,
+        width: "1px",
+        background: "#dcdcdc"
+      }}
     >
       <VStack spacing={2} align="stretch">
         <Flex justifyContent="left" p={2} mb={6}>
@@ -55,7 +52,7 @@ const Leftbar = () => {
 
         <Link to="/search">
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
-            <IconButton icon={<Search fontSize='medium' />} aria-label="Home" background="transparent"  />
+            <IconButton icon={<Search fontSize='medium' />} aria-label="Home" background="transparent" />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Search</Text>
           </HStack>
         </Link>
@@ -74,14 +71,14 @@ const Leftbar = () => {
 
         <Link to="/favorites">
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" >
-            <IconButton icon={<FavoriteBorder fontSize='medium' />} aria-label="Favorites" background="transparent"  _hover={{ bg: 'transparent' }}/>
+            <IconButton icon={<FavoriteBorder fontSize='medium' />} aria-label="Favorites" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Favorites</Text>
           </HStack>
         </Link>
 
         <Link to="/profile/123">
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" >
-            <IconButton icon={<Person fontSize='medium' />} aria-label="Profile" background="transparent"  _hover={{ bg: 'transparent' }}/>
+            <IconButton icon={<Person fontSize='medium' />} aria-label="Profile" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Profile</Text>
           </HStack>
         </Link>

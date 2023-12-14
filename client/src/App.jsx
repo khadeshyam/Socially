@@ -1,4 +1,4 @@
-import React,{useContext} from "react";
+import React, { useContext } from "react";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -29,13 +29,17 @@ const App = () => {
         <Box display="flex">
           <Box
             flex="2.15"
+            display={{ base: "none", md: "block" }} // Hide on mobile, show on tablet and larger
           >
             <LeftBar />
           </Box>
           <Box flex="6">
             <Outlet />
           </Box>
-          <Box flex="3">
+          <Box
+            flex="3"
+            display={{ base: "none", lg: "block" }} // Hide on mobile and tablet, show on large screens and larger
+          >
             <RightBar />
           </Box>
         </Box>
@@ -78,10 +82,10 @@ const App = () => {
         {
           path: "/profile:id",
           element: <Post isCommentOpen={true} />,
-        }, 
+        },
         {
           path: "/feed",
-          element: <Posts/>,
+          element: <Posts />,
         }, {
           path: "/*",
           element: <ComingSoon />,
