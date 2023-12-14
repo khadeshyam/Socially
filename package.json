@@ -11,7 +11,8 @@
 		"server": "cd server && npm run dev",
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
 		"server:prod": "cd server && npm run start",
-		"build:client": "cd client && npm run build && mv client/build server/",
+		"build:client-win": "cd client && npm run build && cd .. && rmdir ./server/build && move ./client/build server/ ",		
+		"start-win": "npm run build:client-win; npm run server:prod",
 		"start": "npm run build:client && npm run server:prod"
 	},
 	"devDependencies": {
