@@ -31,6 +31,8 @@ export const login = (req, res) => {
     if (data.length === 0) return res.status(404).json({ message: 'user not found' });
 
     const user = data[0];
+    console.log(user);
+    if (!user) return res.status(404).json({ message: 'user not found' });
     const validPassword = bcrypt.compareSync(req.body.password, user.password);
     if (!validPassword) return res.status(401).json({ message: 'invalid email or password' });
 
