@@ -69,3 +69,25 @@ export const deletePost = (req, res) => {
         })
     });
 }
+
+export const getPost = (req, res) => {
+    const postId = req.params.postId;
+    const token = req.cookies.accessToken;
+    if (!token) return res.status(401).json({ message: 'Not logged in' });
+
+    jwt.verify(token, process.env.JWT_SECRET, (err, userInfo) => {
+        if (err) return res.status(403).json({ message: 'Session Expired' });
+
+        const q = 'SELECT p.*,u.id AS userId ,u.name AS userName ,u.profilePic AS userProfilePic FROM posts AS p JOIN users AS u ON (u.id = p.userId) WHERE p.id = ?';
+        db.query(q, [postId], (err, data) => {
+            if (err) {
+                console.log(err);
+                res.status(500).json({ message: 'Server Error' });
+            } else if (data.length > 0) {
+                res.status(200).json(data[0]);
+            } else {
+                res.status(404).json({ message: 'Post not found' });
+            }
+        });
+    });
+}
