@@ -108,7 +108,7 @@ const Post = ({ post, isCommentOpen }) => {
             src={post?.userProfilePic}
             name={post?.userName}
             borderRadius="full"
-            objectFit="cover"
+            fit="cover"
             mr="4"
           />
           <Box>
@@ -136,7 +136,7 @@ const Post = ({ post, isCommentOpen }) => {
             effect="blur"
             src={post?.img}
             alt={post?.desc}
-            objectFit="cover"
+            fit="cover"
             mt="4"
           />
         </Box>

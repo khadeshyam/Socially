@@ -1,5 +1,5 @@
 // Sidebar.js
-import React from 'react';
+import React,{useContext} from 'react';
 import { Box, HStack, VStack, IconButton, Text, Flex, useColorMode } from '@chakra-ui/react';
 import {
   Home,
@@ -11,9 +11,11 @@ import {
   SettingsApplications
 } from '@mui/icons-material';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../context/authContext';
 
 const Leftbar = () => {
-  //const { colorMode, toggleColorMode } = useColorMode();
+  const { currentUser } = useContext(AuthContext);
+
 
   return (
     <Box
@@ -76,7 +78,7 @@ const Leftbar = () => {
           </HStack>
         </Link>
 
-        <Link to="/profile/123">
+        <Link to={`/profile/${currentUser?.id}`}>
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" >
             <IconButton icon={<Person fontSize='medium' />} aria-label="Profile" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Profile</Text>

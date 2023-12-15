@@ -24,7 +24,7 @@ const SuggestionItem = ({ username }) => {
           alt=""
           borderRadius="50%"
           boxSize="30px"
-          objectFit="cover"
+          fit="cover"
           marginRight="10px"
         />
         <Text fontWeight="500" fontSize="14px">

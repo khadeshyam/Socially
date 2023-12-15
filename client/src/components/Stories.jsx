@@ -32,7 +32,7 @@ const Stories = () => {
   return (
     <Flex className="stories" gap={8} height="250px" marginBottom="24px">
       <Box className="story" flex="1" borderRadius="8px" overflow="hidden" position="relative" boxShadow="0 1px 4px rgba(0,0,0,0.3)" transition="box-shadow 0.3s ease">
-        <Image src={currentUser?.profilePic} alt="story" height="100%" width="100%" objectFit="cover" />
+        <Image src={currentUser?.profilePic} alt="story" height="100%" width="100%" fit="cover" />
         <Text position="absolute" bottom="8px" left="8px" color="white" fontWeight="500" display={{ base: "none", md: "block" }}>
           {currentUser?.username}
         </Text>
@@ -59,7 +59,7 @@ const Stories = () => {
 
       {stories?.map((story) => (
         <Box key={story.id} className="story" flex="1" borderRadius="8px" overflow="hidden" position="relative" boxShadow="0 1px 4px rgba(0,0,0,0.3)" transition="box-shadow 0.3s ease">
-          <Image src={story.img} alt="story" height="100%" width="100%" objectFit="cover" />
+          <Image src={story.img} alt="story" height="100%" width="100%" fit="cover" />
           <Text position="absolute" bottom="8px" left="8px" color="white" fontWeight="500" display={{ base: "none", md: "block" }}>
             {story.name}
           </Text>

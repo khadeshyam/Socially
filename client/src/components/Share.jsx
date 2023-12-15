@@ -79,7 +79,7 @@ const Share = () => {
             src={currentUser?.profilePic}
             borderRadius="full"
             boxSize="40px"
-            objectFit="cover"
+            fit="cover"
           />
           <Textarea
             value={desc}
@@ -108,7 +108,7 @@ const Share = () => {
               alt="Upload"
               boxSize="100px"
               height="100px"
-              objectFit="cover"
+              fit="cover"
               borderRadius="0px"
             />
           )}

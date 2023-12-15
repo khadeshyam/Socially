@@ -8,6 +8,7 @@ export const getUser = (req, res) => {
   db.query(q, [userId], (err, data) => {
     if (err) return res.status(500).json(err);
     const user = data[0];
+    if (!user) return res.status(404).json({ message: 'user not found' });
     const { password, ...others } = user;
     res.status(200).json(others);
   });

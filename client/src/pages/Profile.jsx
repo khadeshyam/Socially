@@ -67,7 +67,7 @@ const Profile = () => {
             alt=""
             w="100%"
             h="200px"
-            objectFit="fill"
+            fit="fill"
           />
           <Avatar
             src={data?.profilePic || "https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg"}

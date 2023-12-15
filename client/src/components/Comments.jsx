@@ -55,7 +55,7 @@ const Comments = ({ postId }) => {
   return (
     <Box className="comments">
       <Flex className="write" alignItems="center" justifyContent="space-between" gap={4} margin="20px 0px">
-        <Image src={currentUser?.profilePic} alt="" boxSize="40px" borderRadius="50%" objectFit="cover" />
+        <Image src={currentUser?.profilePic} alt="" boxSize="40px" borderRadius="50%" fit="cover" />
         <Input
           type="text"
           placeholder="write a comment"
@@ -84,7 +84,7 @@ const Comments = ({ postId }) => {
         ? "Loading"
         : data?.map((comment) => (
           <Flex className="comment" key={comment?.id} justifyContent="space-between" gap={4} margin="30px 0px" backgroundColor={bgColor} border={`1px solid ${borderColor}`} borderRadius="4px">
-            <Image src={comment?.userProfilePic} alt="" boxSize="40px" borderRadius="50%" objectFit="cover" />
+            <Image src={comment?.userProfilePic} alt="" boxSize="40px" borderRadius="50%" fit="cover" />
             <Box className="info" flex={5} display="flex" flexDirection="column" gap={3} alignItems="flex-start">
               <Text fontWeight="500">{comment?.userName}</Text>
               <Text color={textColorSoft}>{comment?.desc}</Text>
