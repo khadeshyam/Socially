@@ -1,9 +1,6 @@
 name: Build and Deploy React App
 
 on:
-  push:
-    branches:
-      - master # Adjust the branch as needed
   workflow_dispatch:
 
 env:
