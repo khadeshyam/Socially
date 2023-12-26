@@ -1,0 +1,87 @@
+name: Build and Deploy React App
+
+on:
+  push:
+    branches:
+      - master # Adjust the branch as needed
+  workflow_dispatch:
+
+env:
+  PAT: ${{ secrets.PAT }}
+  PRIVATE_REPO_URL: ${{ secrets.PRIVATE_REPO_URL }}
+  USER_EMAIL: ${{ secrets.USER_EMAIL }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+            ${{ runner.os }}-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build React app
+        run: npm run build
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: react-build
+          path: build
+   
+  deploy:
+      
+      needs: build
+      runs-on: ubuntu-latest
+
+      steps:
+        - name: Download React Build Artifact
+          uses: actions/download-artifact@v3
+          with:
+            name: react-build
+            path: react-build
+        
+        - name: Configure Git
+          run: |
+            pwd
+            ls -la
+            echo $PAT
+            echo $PRIVATE_REPO_URL
+            git config --global user.name 'GitHub Actions'
+            git config --global user.email $USER_EMAIL
+
+        - name: Clone Private Repository
+          uses: actions/checkout@v4
+          with:
+            repository: ${{ env.PRIVATE_REPO_URL }}
+            token: ${{ env.PAT }}
+            path: private-repo
+        
+        - name: Remove Old Build Folder in Private Repository
+          run: |
+            rm -rf private-repo/build
+          if: success()
+
+        - name: Create Build Folder in Private Repository
+          run: |
+            mkdir -p private-repo/build
+            cp -r react-build/* private-repo/build/
+          if: success()
+
+        - name: Commit and Push to Private Repository
+          run: |
+            cd private-repo
+            git add .
+            git commit -m "Update React build"
+            git push origin master # Use "master" as the branch name
