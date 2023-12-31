@@ -42,6 +42,56 @@ export const login = (req, res) => {
     res.cookie('accessToken', token, { httpOnly: true }).status(200).json(others);
   });
 }
+export const googleAuth = (req, res) => {
+  console.log(req.body);
+  db.execute('SELECT * FROM users WHERE email = ?', [req.body.email], (err, users) => {
+    if (err) {
+      console.log(err);
+      return res.status(500).json({ message: 'Server Error' });
+    } 
+
+    // IF USER IS ALREADY PRESENT
+    if (users.length > 0) {
+      const user = users[0];
+      const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+      const { password, ...others } = user;
+      res.cookie("accessToken", token, {httpOnly: true}).status(200).json(others);
+    } else {
+      let insertQuery = 'INSERT INTO users SET';
+      let values = [];
+
+      for (let key in req.body) {
+        if (req.body[key] !== undefined) { // Add this check
+          insertQuery += ` \`${key}\` = ?,`;
+          values.push(req.body[key]);
+        }
+      }
+
+      // Remove the trailing comma from the query string
+      insertQuery = insertQuery.slice(0, -1);
+
+      // CREATE NEW USER
+      db.execute(insertQuery, values, (err, result) => {
+        if (err) {
+          console.log(err);
+          return res.status(500).json({ message: 'Server Error' });
+        } else {
+          db.execute('SELECT * FROM users WHERE id = ?', [result.insertId], (err, users) => {
+            if (err) {
+              return res.status(500).json({ message: 'Server Error' });
+            } else {
+              const newUser = users[0];
+              const { password, ...others } = newUser;
+              const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET);
+              res.cookie("accessToken", token, {httpOnly: true}).status(200).json(others);
+            }
+          });
+        }
+      });
+    }
+  });
+};
+
 export const logout = (req, res) => {
   res.clearCookie('accessToken',{
     secure:true,

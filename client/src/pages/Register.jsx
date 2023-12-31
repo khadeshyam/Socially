@@ -1,7 +1,9 @@
-import React, { useState } from 'react';
+import React, { useContext, useState} from 'react';
 import { Box, Flex, Text, Input, Button, Divider, AbsoluteCenter, Spinner } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { makeRequest } from '../axios';
+import { makeRequest } from '../utils/axios';
+import { AuthContext } from '../context/authContext';
+
 
 function Register() {
   const [inputs, setInputs] = useState({
@@ -11,7 +13,8 @@ function Register() {
     name: '',
   });
   const [isLoading, setIsLoading] = useState(false);
-  const [msg, setMsg] = useState(null); // for error messages
+  const [msg, setMsg] = useState(null);
+  const {continueWithGoogle} = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -121,8 +124,9 @@ function Register() {
               p={4}
               mb={4}
               _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
+              onClick={continueWithGoogle}
             >
-              <Link to='/comingsoon'>
+              <Link>
                 Continue with Google
               </Link>
             </Button>

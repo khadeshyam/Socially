@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
 
 function Login() {
-  const { loggin, currentUser } = useContext(AuthContext);
+  const { loggin, currentUser, continueWithGoogle } = useContext(AuthContext);
   const [inputs, setInputs] = useState({
     usernameOrEmail: '',
     password: '',
@@ -99,8 +99,9 @@ function Login() {
               p={4}
               mb={4}
               _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
+              onClick={continueWithGoogle}
             >
-              <Link to="/comingsoon">Continue with Google</Link>
+              <Link >Continue with Google</Link>
             </Button>
           </Flex>
           {msg && <Box textAlign="center" color={msg?.type === 'error' ? 'red' : 'green'} mt={2}>

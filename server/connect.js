@@ -33,7 +33,8 @@ export const initDb = async () => {
       coverPic VARCHAR(200),
       profilePic VARCHAR(200),
       city VARCHAR(45),
-      website VARCHAR(45)
+      website VARCHAR(45),
+      fromGoogle BOOLEAN DEFAULT FALSE
   )
 `);
 

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Box, Spinner } from '@chakra-ui/react';
-import { makeRequest } from '../axios';
+import { makeRequest } from '../utils/axios';
 import Post from './Post';
 import { useInView } from 'react-intersection-observer';
 

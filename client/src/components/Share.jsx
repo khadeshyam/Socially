@@ -15,7 +15,7 @@ import FriendIcon from '../assets/friend.png';
 import { AuthContext } from '../context/authContext';
 import { useQueryClient, useMutation } from '@tanstack/react-query';
 import axios from 'axios';
-import { makeRequest } from '../axios';
+import { makeRequest } from '../utils/axios';
 
 const Share = () => {
   const { currentUser } = useContext(AuthContext);

@@ -11,7 +11,7 @@
 		"build:client": "cd client && npm run build",
 		"server": "cd server && npm run dev",
 		"server:prod": "cd server && npm run start",
-		"dev": "concurrently \"npm run server\" \"npm run client\"",
+		"dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
 		"start": "npm run build:client && npm run server:prod"
 	},
 	"devDependencies": {

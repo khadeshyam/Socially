@@ -1,5 +1,5 @@
 // Sidebar.js
-import React,{useContext} from 'react';
+import React, { useContext } from 'react';
 import { Box, HStack, VStack, IconButton, Text, Flex, useColorMode } from '@chakra-ui/react';
 import {
   Home,
@@ -10,8 +10,10 @@ import {
   Menu,
   SettingsApplications
 } from '@mui/icons-material';
+import Logout from './Logout';
 import { Link } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
+
 
 const Leftbar = () => {
   const { currentUser } = useContext(AuthContext);
@@ -94,6 +96,12 @@ const Leftbar = () => {
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
             <IconButton icon={<Menu />} aria-label="Menu" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Menu</Text>
+          </HStack>
+        </Link>
+        
+        <Link >
+          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
+            <Logout />
           </HStack>
         </Link>
         {/* <IconButton

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Flex, Text, Input, Button, Divider, Spinner, AbsoluteCenter } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
-import { makeRequest } from '../axios';
+import { makeRequest } from '../utils/axios';
 
 function VerifyMail() {
 

@@ -10,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 import { AuthContext } from "../context/authContext";
-import { makeRequest } from '../axios';
+import { makeRequest } from '../utils/axios';
 import moment from "moment";
 
 const Comments = ({ postId }) => {
