@@ -1,10 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Flex, Text, Input, Button, Divider, AbsoluteCenter } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/authContext';
+import { useMutation } from '@tanstack/react-query';
 
 function Login() {
-  const { loggin, currentUser, continueWithGoogle } = useContext(AuthContext);
+  const { loggin, continueWithGoogle } = useContext(AuthContext);
   const [inputs, setInputs] = useState({
     usernameOrEmail: '',
     password: '',
@@ -13,30 +14,48 @@ function Login() {
   const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    currentUser && navigate('/');
-  }, [currentUser]);
+  const loginMutation = useMutation(loggin, {
+    onSuccess: () => {
+      setMsg({ type: 'success', title: 'Login successful!' });
+      navigate('/');
+    },
+    onError: (err) => {
+      const message = err.response?.data?.message || err?.message;
+      setMsg({ type: 'error', title: message });
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
+
+  const continueWithGoogleMutation = useMutation(continueWithGoogle, {
+    onSuccess: () => {
+      setMsg({ type: 'success', title: 'Login successful!' });
+      navigate('/');
+    },
+    onError: (err) => {
+      const message = err.response?.data?.message || err?.message;
+      setMsg({ type: 'error', title: message });
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
+
+
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    if (!inputs.usernameOrEmail || !inputs.password) {
+      setMsg({ type: 'error', title: 'Fill in all the fields' });
+      return;
+    }
+    setIsLoading(true);
+    loginMutation.mutate(inputs);
+  };
 
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleLogin = async (e) => {
-    try {
-      e.preventDefault();
-      if (!inputs.usernameOrEmail || !inputs.password) {
-        throw new Error('Fill in all the fields');
-      }
-      setIsLoading(true);
-      await loggin(inputs);
-      // If you want to show a success message, you can set it here
-      setMsg({ type: 'sucess', title: 'Login successful!' });
-    } catch (err) {
-      const message = err.response?.data?.message || err?.message;
-      setMsg({ type: 'error', title: message });
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   return (
@@ -99,7 +118,7 @@ function Login() {
               p={4}
               mb={4}
               _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
-              onClick={continueWithGoogle}
+              onClick={() => continueWithGoogleMutation.mutate()}
             >
               <Link >Continue with Google</Link>
             </Button>

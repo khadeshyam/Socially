@@ -1,12 +1,13 @@
 import { db } from '../connect.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import { MAX_AGE as maxAge } from '../utils/constants.js';
 
 export const register = (req, res) => {
 
   //CHECK IF USER EXISTS
   const q = 'SELECT * FROM users WHERE username = ? OR email = ?';
-  db.query(q, [req.body.username,req.body.email], (err, data) => {
+  db.query(q, [req.body.username, req.body.email], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server Error' });
     if (data.length > 0) return res.status(409).json({ message: 'user already exists' });
 
@@ -39,23 +40,25 @@ export const login = (req, res) => {
     const { password, ...others } = user;
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
-    res.cookie('accessToken', token, { httpOnly: true }).status(200).json(others);
+    res.cookie('accessToken', token, { httpOnly: true, maxAge }).status(200).json(others);
   });
 }
 export const googleAuth = (req, res) => {
   console.log(req.body);
   db.execute('SELECT * FROM users WHERE email = ?', [req.body.email], (err, users) => {
+    
     if (err) {
       console.log(err);
       return res.status(500).json({ message: 'Server Error' });
-    } 
+    }
 
     // IF USER IS ALREADY PRESENT
     if (users.length > 0) {
+      console.log(`User already exists`);
       const user = users[0];
       const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
       const { password, ...others } = user;
-      res.cookie("accessToken", token, {httpOnly: true}).status(200).json(others);
+      res.cookie("accessToken", token, { httpOnly: true, maxAge }).status(200).json(others);
     } else {
       let insertQuery = 'INSERT INTO users SET';
       let values = [];
@@ -71,6 +74,7 @@ export const googleAuth = (req, res) => {
       insertQuery = insertQuery.slice(0, -1);
 
       // CREATE NEW USER
+      console.log(`Creating new user`);
       db.execute(insertQuery, values, (err, result) => {
         if (err) {
           console.log(err);
@@ -83,7 +87,7 @@ export const googleAuth = (req, res) => {
               const newUser = users[0];
               const { password, ...others } = newUser;
               const token = jwt.sign({ id: newUser.id }, process.env.JWT_SECRET);
-              res.cookie("accessToken", token, {httpOnly: true}).status(200).json(others);
+              res.cookie("accessToken", token, { httpOnly: true, maxAge }).status(200).json(others);
             }
           });
         }
@@ -93,8 +97,8 @@ export const googleAuth = (req, res) => {
 };
 
 export const logout = (req, res) => {
-  res.clearCookie('accessToken',{
-    secure:true,
-    sameSite:'none'
-  }).status(200).json({message:'user has been logged out'});
+  res.clearCookie('accessToken', {
+    secure: true,
+    sameSite: 'none'
+  }).status(200).json({ message: 'user has been logged out' });
 }

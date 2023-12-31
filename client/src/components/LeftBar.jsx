@@ -100,9 +100,7 @@ const Leftbar = () => {
         </Link>
         
         <Link >
-          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
             <Logout />
-          </HStack>
         </Link>
         {/* <IconButton
           icon={colorMode === 'light' ? <DarkMode/> : <LightMode />}

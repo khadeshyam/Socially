@@ -17,33 +17,29 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Box } from "@chakra-ui/react";
 import { AuthContext } from './context/authContext';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const App = () => {
   const { currentUser } = useContext(AuthContext);
-  const queryClient = new QueryClient();
 
   const Layout = () => {
     return (
-      <QueryClientProvider client={queryClient}>
-        <Box display="flex">
-          <Box
-            flex="2.15"
-            display={{ base: "none", md: "block" }} // Hide on mobile, show on tablet and larger
-          >
-            <LeftBar />
-          </Box>
-          <Box flex="6">
-            <Outlet />
-          </Box>
-          <Box
-            flex="3"
-            display={{ base: "none", lg: "block" }} // Hide on mobile and tablet, show on large screens and larger
-          >
-            <RightBar />
-          </Box>
+      <Box display="flex">
+        <Box
+          flex="2.15"
+          display={{ base: "none", md: "block" }} // Hide on mobile, show on tablet and larger
+        >
+          <LeftBar />
         </Box>
-      </QueryClientProvider>
+        <Box flex="6">
+          <Outlet />
+        </Box>
+        <Box
+          flex="3"
+          display={{ base: "none", lg: "block" }} // Hide on mobile and tablet, show on large screens and larger
+        >
+          <RightBar />
+        </Box>
+      </Box>
     );
   };
 
@@ -110,9 +106,7 @@ const App = () => {
   ]);
 
   return (
-    <Box>
       <RouterProvider router={router} />
-    </Box>
   );
 }
 

@@ -1,6 +1,8 @@
 import React, { useRef, useState,useContext } from 'react';
 import { AlertDialog, AlertDialogBody, AlertDialogFooter, AlertDialogHeader, AlertDialogContent, AlertDialogOverlay, Button } from "@chakra-ui/react";
-import { AuthContext } from '../context/authContext'; // Assuming you have a useAuth hook
+import { AuthContext } from '../context/authContext'; 
+import PowerSettingsNewIcon from '@mui/icons-material/PowerSettingsNew';
+import { HStack, IconButton, Text} from '@chakra-ui/react';
 
 const Logout = () => {
   const { logout } = useContext(AuthContext); // Assuming you have a logout function in your AuthContext
@@ -15,7 +17,10 @@ const Logout = () => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Logout</Button>
+      <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" onClick={() => setIsOpen(true)}>
+            <IconButton icon={<PowerSettingsNewIcon />} aria-label="Menu" background="transparent" _hover={{ bg: 'transparent' }} />
+            <Text fontSize="sm" fontWeight="bold" ml={2}>Logout</Text>
+      </HStack>
 
       <AlertDialog
         isOpen={isOpen}

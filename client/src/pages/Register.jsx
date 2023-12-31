@@ -1,9 +1,9 @@
-import React, { useContext, useState} from 'react';
+import React, { useContext, useState } from 'react';
 import { Box, Flex, Text, Input, Button, Divider, AbsoluteCenter, Spinner } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import { makeRequest } from '../utils/axios';
 import { AuthContext } from '../context/authContext';
-
+import { useMutation } from '@tanstack/react-query';
 
 function Register() {
   const [inputs, setInputs] = useState({
@@ -17,27 +17,46 @@ function Register() {
   const {continueWithGoogle} = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const registerMutation = useMutation((inputs) => makeRequest.post('/auth/register', inputs), {
+    onSuccess: () => {
+      setInputs({ username: '', email: '', password: '', name: '' });
+      navigate('/login');
+    },
+    onError: (err) => {
+      const message = err.response?.data?.message || err?.message;
+      setMsg({ type: 'error', title: message });
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
+
+  const continueWithGoogleMutation = useMutation(continueWithGoogle, {
+    onSuccess: () => {
+      setMsg({ type: 'success', title: 'Registration successful!' });
+      navigate('/');
+    },
+    onError: (err) => {
+      const message = err.response?.data?.message || err?.message;
+      setMsg({ type: 'error', title: message });
+    },
+    onSettled: () => {
+      setIsLoading(false);
+    },
+  });
+
   const handleChange = (e) => {
     setInputs((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleClick = async (e) => {
+  const handleClick = (e) => {
     e.preventDefault();
-    try {
-      setIsLoading(true);
-      setMsg(null); // Clear previous error messages
-      if (!inputs.username || !inputs.email || !inputs.password || !inputs.name) {
-        throw new Error('Please fill all the fields');
-      }
-      await makeRequest.post('/auth/register', inputs);
-      setInputs({ username: '', email: '', password: '', name: '' });
-      navigate('/login');
-    } catch (err) {
-      const message = err.response?.data?.message || err?.message;
-      setMsg({ type: 'error', title: message });
-    } finally {
-      setIsLoading(false);
+    if (!inputs.username || !inputs.email || !inputs.password || !inputs.name) {
+      setMsg({ type: 'error', title: 'Please fill all the fields' });
+      return;
     }
+    setIsLoading(true);
+    registerMutation.mutate(inputs);
   };
 
   return (
@@ -67,6 +86,7 @@ function Register() {
             p={4}
             mb={3}
             name="email"
+            type="email"
             onChange={handleChange}
           />
           <Input
@@ -124,7 +144,7 @@ function Register() {
               p={4}
               mb={4}
               _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
-              onClick={continueWithGoogle}
+              onClick={() => continueWithGoogleMutation.mutate()}
             >
               <Link>
                 Continue with Google

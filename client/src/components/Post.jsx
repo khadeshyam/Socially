@@ -100,6 +100,23 @@ const Post = ({ post, isCommentOpen }) => {
     return <FavoriteBorderOutlinedIcon />;
   };
 
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Check out this post!',
+          text: post?.desc,
+          url: `${window.location.origin}/post/${post?.id}`,
+        });
+        console.log('Content shared successfully');
+      } catch (error) {
+        console.log('Error sharing', error);
+      }
+    } else {
+      console.log('Web Share API is not supported in your browser.');
+    }
+  };
+
   return (
     <Box borderRadius="lg" border="1px solid #dcdcdc" bgColor="white" color="black" margin="20px" padding="20px">
       <Flex align="center" justify="space-between" p="4">
@@ -155,7 +172,7 @@ const Post = ({ post, isCommentOpen }) => {
           <TextsmsOutlinedIcon />
           <Text>Comments</Text>
         </Flex>
-        <Flex align="center" gap="4">
+        <Flex align="center" gap="4" onClick={handleShare} cursor="pointer">
           <ShareOutlinedIcon />
           <Text>Share</Text>
         </Flex>
