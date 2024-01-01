@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-export const sendEmail = (to, subject, text) => {
+export const sendEmail = (to, subject, text = '',html = '') => {
 	const transporter = nodemailer.createTransport({
 		service: 'gmail',
 		auth: {
@@ -13,7 +13,8 @@ export const sendEmail = (to, subject, text) => {
 		from: process.env.EMAIL_USERNAME,
 		to: to,
 		subject: subject,
-		text: text
+		text: text,
+		html: html
 	};
 
 	return new Promise((resolve, reject) => {

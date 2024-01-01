@@ -144,3 +144,56 @@ export const logout = (req, res) => {
     sameSite: 'none'
   }).status(200).json({ message: 'user has been logged out' });
 }
+
+
+export const forgotPassword = (req, res) => {
+  const { email } = req.body;
+  const q = "SELECT * FROM users WHERE email = ?";
+
+  db.query(q, [email], (err, data) => {
+    if (err) return res.status(500).json(err);
+    const user = data[0];
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    const html = `<p>Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:</p>
+    <a href="${process.env.CLIENT_URL}/reset-password/${token}">Reset password</a>
+    <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`;
+    const text = `You are receiving this because you (or someone else) have requested the reset of the password for your account.`
+
+    sendEmail(email, 'Password Reset', text, html)
+      .then(() => res.status(200).json({message:'recovery email sent'}))
+      .catch((err) => {
+        console.error('there was an error: ', err);
+        res.status(500).json(err);
+      });
+  });
+};
+
+export const resetPassword = (req, res) => {
+  const { token, newPassword } = req.body;
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, decodedUser) => {
+    if (err) return res.status(401).json({ message: 'Invalid token' });
+
+    const q = "SELECT * FROM users WHERE id = ?";
+
+    db.query(q, [decodedUser.id], (err, data) => {
+      if (err) return res.status(500).json(err);
+      const user = data[0];
+      if (!user) return res.status(404).json({ message: 'User not found' });
+
+      bcrypt.hash(newPassword, 10, (err, hashedPassword) => {
+        if (err) return res.status(500).json(err);
+
+        const q = "UPDATE users SET password = ? WHERE id = ?";
+
+        db.query(q, [hashedPassword, user.id], (err, result) => {
+          if (err) return res.status(500).json(err);
+          res.status(200).json({ message: 'Password reset successful' });
+        });
+      });
+    });
+  });
+};

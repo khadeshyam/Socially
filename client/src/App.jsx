@@ -13,6 +13,8 @@ import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import ComingSoon from "./pages/CommingSoon";
 import VerifyEmail from "./pages/VerifyEmail";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Box } from "@chakra-ui/react";
@@ -104,6 +106,14 @@ const App = () => {
     {
       path: "/verify-email",
       element: <VerifyEmail />,
+    },
+    {
+      path: "/forgot-password",
+      element: <ForgotPassword />,
+    }, 
+    {
+      path: "/reset-password/:token",
+      element: <ResetPassword />,
     }, {
       path: "/comingsoon",
       element: <ComingSoon />,
