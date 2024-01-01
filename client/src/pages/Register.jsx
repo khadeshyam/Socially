@@ -14,13 +14,16 @@ function Register() {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [msg, setMsg] = useState(null);
-  const {continueWithGoogle} = useContext(AuthContext);
+  const { continueWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const registerMutation = useMutation((inputs) => makeRequest.post('/auth/register', inputs), {
-    onSuccess: () => {
-      setInputs({ username: '', email: '', password: '', name: '' });
-      navigate('/login');
+    onSuccess: (res) => {
+      console.log(res);
+      if (res.status === 200) {
+        setInputs({ username: '', email: '', password: '', name: '' });
+        navigate('/verify-email');
+      }
     },
     onError: (err) => {
       const message = err.response?.data?.message || err?.message;

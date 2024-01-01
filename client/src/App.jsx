@@ -12,7 +12,7 @@ import Posts from "./components/Posts";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import ComingSoon from "./pages/CommingSoon";
-import VerifyMail from "./pages/VerifyMail";
+import VerifyEmail from "./pages/VerifyEmail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Box } from "@chakra-ui/react";
@@ -102,8 +102,8 @@ const App = () => {
       element: <Register />,
     },
     {
-      path: "/verifymail",
-      element: <VerifyMail />,
+      path: "/verify-email",
+      element: <VerifyEmail />,
     }, {
       path: "/comingsoon",
       element: <ComingSoon />,

@@ -2,29 +2,71 @@ import { db } from '../connect.js';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { MAX_AGE as maxAge } from '../utils/constants.js';
+import { generateOtp } from '../utils/otp.js';
+import { sendEmail } from '../utils/sendEmail.js';
 
 export const register = (req, res) => {
-
+  console.log('register');
   //CHECK IF USER EXISTS
   const q = 'SELECT * FROM users WHERE username = ? OR email = ?';
   db.query(q, [req.body.username, req.body.email], (err, data) => {
     if (err) return res.status(500).json({ message: 'Server Error' });
     if (data.length > 0) return res.status(409).json({ message: 'user already exists' });
 
-    //CREATE A NEW USER
-    //HASH PASSWORD
+    //SEND OTP TO EMAIL
+    const otp = generateOtp().toString();
     const salt = bcrypt.genSaltSync(10);
-    const hash = bcrypt.hashSync(req.body.password, salt);
+    const otpHash = bcrypt.hashSync(otp, salt);
+    const passHash = bcrypt.hashSync(req.body.password, salt);
+
+    const user = {
+      username: req.body.username,
+      email: req.body.email,
+      password: passHash,
+      otp: otpHash,
+      name: req.body.name
+    };
+
+    const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '10m' });
+    res.cookie('jwtToken', token, { httpOnly: true, maxAge: 10 * 60 * 1000 });
+
+    const emailContent = `Your OTP for verification is ${otp}. Please use this OTP within the next 10 minutes.`;
+    sendEmail(req.body.email, 'OTP for Verification', emailContent)
+      .then((info) => {
+        console.log('email sent',info);
+        return res.status(200).json({ message: 'OTP sent to your email' });
+      })
+      .catch(err => {
+        console.log(err);
+        return res.status(422).json({ message: 'Invalid Email' });
+      });
+
+  })
+}
+
+export const verifyEmail = (req, res) => {
+  //CREATE A NEW USER IF NEW EMAIL IS VERIFIED
+  const { jwtToken } = req.cookies;
+  if (!jwtToken) return res.status(401).json({ message: 'Token expired' });
+  const { otp } = req.body;
+  jwt.verify(jwtToken, process.env.JWT_SECRET, (err, user) => {
+    if (err) return res.status(401).json({ message: 'Invalid token' });
+    console.log(user);
+    const cookieOtpHash = user.otp;
+    // Use bcrypt.compareSync to compare the OTP with the hashed OTP
+    const isMatch = bcrypt.compareSync(otp, cookieOtpHash);
+    if (!isMatch) return res.status(401).json({ message: 'Invalid OTP' });
 
     //INSERT INTO DB
     const q = 'INSERT INTO users (`username`,`email`,`password`,`name`) VALUES (?,?,?,?)';
-    const values = [req.body.username, req.body.email, hash, req.body.name];
+    const values = [user.username, user.email, user.password, user.name];
     db.query(q, values, (err, data) => {
       if (err) return res.status(500).json({ message: 'Server Error' });
       return res.status(200).json({ message: 'user created' });
     });
-  })
+  });
 }
+
 export const login = (req, res) => {
   const q = 'SELECT * FROM users WHERE username = ? OR email = ?';
   db.query(q, [req.body.usernameOrEmail, req.body.usernameOrEmail], (err, data) => {
@@ -46,7 +88,7 @@ export const login = (req, res) => {
 export const googleAuth = (req, res) => {
   console.log(req.body);
   db.execute('SELECT * FROM users WHERE email = ?', [req.body.email], (err, users) => {
-    
+
     if (err) {
       console.log(err);
       return res.status(500).json({ message: 'Server Error' });

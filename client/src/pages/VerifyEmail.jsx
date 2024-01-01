@@ -7,6 +7,7 @@ function VerifyMail() {
 
   const [verificationCode, setVerificationCode] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [msg, setMsg] = useState(null); // Add this line
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,11 +22,16 @@ function VerifyMail() {
         throw new Error('Please enter the verification code');
       }
       // Make a request to verify the code
-      await makeRequest.post('/auth/verify-gmail', { code: verificationCode });
+      const res = await makeRequest.post('/auth/verify-email', { otp: verificationCode });
       // Handle success and navigate accordingly
-      //navigate('/success');
+      res.status === 200 && navigate('/login');
     } catch (err) {
-      console.error(err); // Handle errors as needed
+      console.error(err.message); // Handle errors as needed
+      if (err.response && err.response.status === 401) {
+        setMsg({ type: 'error', title: err.response.data.message });
+      } else {
+        setMsg({ type: 'error', title: err.message });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -41,7 +47,7 @@ function VerifyMail() {
             </Text>
           </Flex>
           <Text mb={4} textAlign="center">
-            Please enter the verification code sent to your Gmail account.
+            Please enter the verification code sent to your Email account.
           </Text>
           <Input
             placeholder="Verification Code"
@@ -53,43 +59,37 @@ function VerifyMail() {
             value={verificationCode}
             onChange={handleChange}
           />
-          <Flex justifyContent="center" my="3">
-            <Button
-              variant="solid"
-              borderRadius="lg"
-              bgGradient="linear(to-r, #8253e0, #b542b3)"
-              color="white"
-              p={4}
-              _hover={{ opacity: 0.8 }}
-              onClick={handleClick}
-              isLoading={isLoading}
-              isDisabled={isLoading}
-              loadingText={
-                <Flex align="center">
-                  Verifying...
-                  <Spinner ml={2} size="sm" color="white" />
-                </Flex>
-              }
-            >
-              Verify
-            </Button>
-          </Flex>
-          <Box position="relative" my="4">
-            <Divider borderColor="gray.500" height="10px" />
-            <AbsoluteCenter bg="white" px="4">
-              OR
-            </AbsoluteCenter>
-          </Box>
-          <Flex justifyContent="center" my="3">
-          </Flex>
-          <Flex justifyContent="space-between" mt={4}>
+          <Flex mt={4} alignItems="center" justifyContent="space-between">
             <Text fontSize="sm" color="gray.500">
-              <Link to="/resend-code">Resend Verification Code</Link>
+              <Link to="/resend-code">Resend code</Link>
             </Text>
-            <Text fontSize="sm" color="gray.500">
-              <Link to="/logout">Logout</Link>
-            </Text>
+            <Flex my="3">
+              <Button
+                variant="solid"
+                borderRadius="lg"
+                bgGradient="linear(to-r, #8253e0, #b542b3)"
+                color="white"
+                p={4}
+                _hover={{ opacity: 0.8 }}
+                onClick={handleClick}
+                isLoading={isLoading}
+                isDisabled={!verificationCode || isLoading}
+                loadingText={
+                  <Flex align="center">
+                    Verifying...
+                  </Flex>
+                }
+              >
+                Verify
+              </Button>
+            </Flex>
           </Flex>
+          <Divider />
+          {msg && (
+                <Box textAlign="center" color={msg?.type === 'error' ? 'red' : 'green'} mt={2}>
+                  {msg?.title}
+                </Box>
+          )}
         </Box>
       </Flex>
     </Box>
