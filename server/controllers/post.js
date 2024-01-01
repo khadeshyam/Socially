@@ -4,8 +4,8 @@ import moment from 'moment';
 
 export const getPosts = (req, res) => {
     const userId = req.query?.userId;
-    const page = req.query?.page || 1;
-    const limit = req.query?.limit || 3;
+    const page = parseInt(req.query?.page) || 1;
+    const limit = parseInt(req.query?.limit) || 3;
     const offset = (page - 1) * limit;
 
     const token = req.cookies.accessToken;

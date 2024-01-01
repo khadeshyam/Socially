@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -16,10 +16,11 @@ import VerifyMail from "./pages/VerifyMail";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import { Box } from "@chakra-ui/react";
-import { AuthContext } from './context/authContext';
+import { useAuth } from './hooks/useAuth';
 
 const App = () => {
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser } = useAuth();
+  console.log('currentUser', currentUser);
 
   const Layout = () => {
     return (
@@ -72,16 +73,20 @@ const App = () => {
           element: <Post />,
         },
         {
-          path: "/comment/:id",
-          element: <Post isCommentOpen={true} />,
+          path: "/comments/:id",
+          element: <Post isCommentOpen={true} userId={currentUser?.id}/>,
         },
         {
           path: "/profile:id",
-          element: <Post isCommentOpen={true} />,
+          element: <Post isCommentOpen={true} userId={currentUser?.id}/>,
         },
         {
           path: "/feed",
           element: <Posts />,
+        },
+        {
+          path: "/favorites",
+          element: <Posts userId={currentUser?.id}/>,
         }, {
           path: "/*",
           element: <ComingSoon />,

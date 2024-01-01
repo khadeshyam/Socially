@@ -1,15 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Box, Spinner } from '@chakra-ui/react';
 import { makeRequest } from '../utils/axios';
 import Post from './Post';
 import { useInView } from 'react-intersection-observer';
+import { useMatch } from 'react-router-dom';
 
 const Posts = ({ userId }) => {
   
+  const match = useMatch('/favorites');
+  console.log('match', match);
+
   const fetchPosts = async ({ pageParam = 1 }) => {
     console.log('Fetching page', pageParam); // Log the page being fetched
-    const res = await makeRequest.get(`/posts`, {
+    const res = await makeRequest.get(match ? '/users/likedPosts' : '/posts', {
       params: { page: pageParam, userId },
     });
     return res.data;

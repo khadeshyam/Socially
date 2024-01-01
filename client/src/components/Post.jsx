@@ -11,36 +11,40 @@ import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
-import { Link,useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from '../utils/axios';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import moment from 'moment';
 import Comments from './Comments';
 
 
+
 const Post = ({ post, isCommentOpen }) => {
-  const [commentOpen, setCommentOpen] = useState(isCommentOpen ? true : false);
+
+  const commentOpen = isCommentOpen ? true : false;
+  console.log('iscommentOpen', isCommentOpen);
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const { id } = useParams();
-  console.log(id);
+  console.log('post', post);
 
-  const { data : pagePost} = useQuery(
+  const { data: pagePost } = useQuery(
     ['post', id],
     () => makeRequest.get(`/posts/${id}`).then((res) => res.data),
-    { enabled: !post}
+    { enabled: !post }
   );
 
-  console.log(pagePost);
-  if(!post) post = {...pagePost};
+  console.log('pagePost',pagePost);
+  if (!post && pagePost) post = { ...pagePost };
+  console.log('post',post);
 
 
-  const { isLoading:isLikeLoading, error, data } = useQuery({
+  const { isLoading: isLikeLoading, error, data } = useQuery({
     queryKey: ['likes', post?.id],
     queryFn: () =>
       makeRequest.get('/likes?postId=' + post?.id).then((res) => res.data),
@@ -163,21 +167,26 @@ const Post = ({ post, isCommentOpen }) => {
           {renderLikeIcon()}
           <Text>{data?.length} Likes</Text>
         </Flex>
-        <Flex
-          align="center"
-          gap="4"
-          cursor="pointer"
-          onClick={() => setCommentOpen(!commentOpen)}
+        <Link
+          to={{
+            pathname: `/comments/${post?.id}`
+          }}
         >
-          <TextsmsOutlinedIcon />
-          <Text>Comments</Text>
-        </Flex>
+          <Flex
+            align="center"
+            gap="4"
+            cursor="pointer"
+          >
+            <TextsmsOutlinedIcon />
+            <Text>Comments</Text>
+          </Flex>
+        </Link>
         <Flex align="center" gap="4" onClick={handleShare} cursor="pointer">
           <ShareOutlinedIcon />
           <Text>Share</Text>
         </Flex>
       </Flex>
-      {commentOpen && <Comments postId={post?.id} />}
+      {commentOpen && <Comments postId={post?.id ? post?.id :id } />}
     </Box>
   );
 };
