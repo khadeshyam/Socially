@@ -28,6 +28,13 @@ jobs:
       - name: Install dependencies
         run: cd client && npm i && cd ..
 
+      - name: Create env files
+        run: |
+          cd client && cat <<EOL > .env
+          $CLIENT_ENV
+          EOL
+          
+
       - name: Build React app
         run: cd client && npm run build || true
 
