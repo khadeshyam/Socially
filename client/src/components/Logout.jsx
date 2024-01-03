@@ -17,7 +17,7 @@ const Logout = () => {
 
   return (
     <>
-      <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" onClick={() => setIsOpen(true)}>
+      <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" onClick={() => setIsOpen(true)} cursor="pointer">
             <IconButton icon={<PowerSettingsNewIcon />} aria-label="Menu" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Logout</Text>
       </HStack>

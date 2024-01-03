@@ -99,9 +99,7 @@ const Leftbar = () => {
           </HStack>
         </Link>
         
-        <Link >
-            <Logout />
-        </Link>
+        <Logout />
         {/* <IconButton
           icon={colorMode === 'light' ? <DarkMode/> : <LightMode />}
           aria-label="Toggle Dark Mode"
