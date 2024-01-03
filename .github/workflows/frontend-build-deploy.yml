@@ -39,13 +39,6 @@ jobs:
       env:
         CI: false
 
-  deploy:
-
-    needs: build
-    runs-on: ubuntu-latest
-
-    steps:
-
     - name: Copy React build to server
       run: |
         cp -r client/build server
