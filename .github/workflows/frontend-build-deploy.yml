@@ -20,17 +20,18 @@ jobs:
       uses: actions/checkout@v4
 
     
-    - name: Set up envs for client
+    - name: Create env files
       run: |
-        cat <<EOL > client/.env
+        cd client && cat <<EOL > .env
         $CLIENT_ENV
         EOL
+
 
     - name: Install dependencies
       run: |
         cd client 
+        ls -a
         npm install
-
   
     - name: Build React app
       run: |
