@@ -1,91 +1,68 @@
 name: Build and Deploy React App
 
-on:
+on: 
   workflow_dispatch:
 
 env:
-  PAT: ${{ secrets.PAT }}
+  PAT: ${{ secrets.PAT }}  
   PRIVATE_REPO_URL: ${{ secrets.PRIVATE_REPO_URL }}
   USER_EMAIL: ${{ secrets.USER_EMAIL }}
 
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: Cache npm dependencies
-        uses: actions/cache@v3
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-            ${{ runner.os }}-
+    - name: Install dependencies
+      run: |
+        cd client 
+        npm install
 
-      - name: Install dependencies
-        run: cd client && npm i && cd ..
+    - name: Build React app
+      run: |
+        cd client
+        npm run build -- --source-map=false
 
-      - name: Create env files
-        run: |
-          cd client && cat <<EOL > .env
-          $CLIENT_ENV
-          EOL
-          
-
-      - name: Build React app
-        run: cd client && npm run build || true
-
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: react-build
-          path: client/build
-   
   deploy:
-      
-      needs: build
-      runs-on: ubuntu-latest
 
-      steps:
-        - name: Download React Build Artifact
-          uses: actions/download-artifact@v3
-          with:
-            name: react-build
-            path: react-build
-        
-        - name: Configure Git
-          run: |
-            pwd
-            ls -la
-            echo $PAT
-            echo $PRIVATE_REPO_URL
-            git config --global user.name 'GitHub Actions'
-            git config --global user.email $USER_EMAIL
+    needs: build
+    runs-on: ubuntu-latest
 
-        - name: Clone Private Repository
-          uses: actions/checkout@v4
-          with:
-            repository: ${{ env.PRIVATE_REPO_URL }}
-            token: ${{ env.PAT }}
-            path: private-repo
-        
-        - name: Remove Old Build Folder in Private Repository
-          run: |
-            rm -rf private-repo/build
-          if: success()
+    steps:
 
-        - name: Create Build Folder in Private Repository
-          run: |
-            mkdir -p private-repo/build
-            cp -r react-build/* private-repo/build/
-          if: success()
+    - name: Copy React build to server
+      run: |
+        cp -r client/build server
 
-        - name: Commit and Push to Private Repository
-          run: |
-            cd private-repo
-            git add .
-            git commit -m "Update React build"
-            git push origin master # Use "master" as the branch name
+    - name: Clone Private Repo  
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ env.PRIVATE_REPO_URL }}  
+        token: ${{ env.PAT }}
+        path: private-repo
+    
+    - name: Remove all files in private repo
+      run: |
+        rm -rf private-repo/*
+
+    - name: Copy server folder to private repo
+      run: |
+        cp -r server/* private-repo/
+
+    - name: Configure Git  
+      run: |
+        git config --global user.name 'GitHub Actions'
+        git config --global user.email ${{ env.USER_EMAIL }}
+
+    - name: Commit and Push changes
+      run: |
+        cd private-repo
+        git add .
+        git commit -m "Update files"
+        git push origin master
