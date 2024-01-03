@@ -14,7 +14,7 @@ const __dirname = process.cwd();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGIN , // specify the origin
+  origin: process.env.CLIENT_URL , // specify the origin
   credentials: true, // allowing credentials
 }));
 
