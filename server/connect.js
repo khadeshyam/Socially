@@ -26,14 +26,14 @@ export const initDb = async () => {
   db.execute(`
   CREATE TABLE IF NOT EXISTS social.users (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      username VARCHAR(45) NOT NULL,
-      email VARCHAR(45) NOT NULL,
-      password VARCHAR(200) NOT NULL,
-      name VARCHAR(45) NOT NULL,
-      coverPic VARCHAR(200),
-      profilePic VARCHAR(200),
-      city VARCHAR(45),
-      website VARCHAR(45),
+      username MEDIUMTEXT NOT NULL,
+      email MEDIUMTEXT NOT NULL,
+      password MEDIUMTEXT NOT NULL,
+      name MEDIUMTEXT NOT NULL,
+      coverPic MEDIUMTEXT,
+      profilePic MEDIUMTEXT,
+      city MEDIUMTEXT,
+      website MEDIUMTEXT,
       fromGoogle BOOLEAN DEFAULT FALSE
   )
 `);
@@ -41,8 +41,8 @@ export const initDb = async () => {
   db.execute(`
   CREATE TABLE IF NOT EXISTS social.posts (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      \`desc\` VARCHAR(200),
-      img VARCHAR(300),
+      \`desc\` MEDIUMTEXT,
+      img MEDIUMTEXT,
       userId INT NOT NULL,
       createdAt DATETIME,
       FOREIGN KEY (userId) 
@@ -71,7 +71,7 @@ export const initDb = async () => {
   db.execute(`
   CREATE TABLE IF NOT EXISTS social.comments (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      \`desc\` VARCHAR(45),
+      \`desc\` MEDIUMTEXT,
       createdAt DATETIME,
       userId INT NOT NULL,
       postId INT NOT NULL,
@@ -89,7 +89,7 @@ export const initDb = async () => {
   db.execute(`
   CREATE TABLE IF NOT EXISTS social.stories (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      img VARCHAR(200),
+      img MEDIUMTEXT,
       userId INT NOT NULL,
       FOREIGN KEY (userId) 
           REFERENCES social.users(id)
