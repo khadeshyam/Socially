@@ -25,12 +25,14 @@ jobs:
         cd client && cat <<EOL > .env
         $CLIENT_ENV
         EOL
+        rm -f .env.example
 
 
     - name: Install dependencies
       run: |
         cd client 
         ls -a
+        cat .env
         npm install
   
     - name: Build React app
