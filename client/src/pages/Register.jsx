@@ -13,11 +13,15 @@ function Register() {
     name: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [msg, setMsg] = useState(null);
   const { continueWithGoogle } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const registerMutation = useMutation((inputs) => makeRequest.post('/auth/register', inputs), {
+    onMutate: () => {
+      setIsLoading(true);
+    },
     onSuccess: (res) => {
       console.log(res);
       if (res.status === 200) {
@@ -35,6 +39,9 @@ function Register() {
   });
 
   const continueWithGoogleMutation = useMutation(continueWithGoogle, {
+    onMutate: () => {
+      setIsGoogleLoading(true);
+    },
     onSuccess: () => {
       setMsg({ type: 'success', title: 'Registration successful!' });
       navigate('/');
@@ -44,7 +51,7 @@ function Register() {
       setMsg({ type: 'error', title: message });
     },
     onSettled: () => {
-      setIsLoading(false);
+      setIsGoogleLoading(false);
     },
   });
 
@@ -58,7 +65,6 @@ function Register() {
       setMsg({ type: 'error', title: 'Please fill all the fields' });
       return;
     }
-    setIsLoading(true);
     registerMutation.mutate(inputs);
   };
 
@@ -148,6 +154,9 @@ function Register() {
               mb={4}
               _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
               onClick={() => continueWithGoogleMutation.mutate()}
+              disabled={isGoogleLoading} // Disable button when loading
+              isLoading={isGoogleLoading} // Show loading indicator when loading
+              loadingText="Logging In with Google ..."
             >
               <Link>
                 Continue with Google

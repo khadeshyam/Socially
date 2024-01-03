@@ -11,6 +11,7 @@ function Login() {
     password: '',
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [msg, setMsg] = useState(null);
   const navigate = useNavigate();
 
@@ -29,6 +30,10 @@ function Login() {
   });
 
   const continueWithGoogleMutation = useMutation(continueWithGoogle, {
+    onMutate: () => {
+      setIsGoogleLoading(true);
+    },
+
     onSuccess: () => {
       setMsg({ type: 'success', title: 'Login successful!' });
       navigate('/');
@@ -38,7 +43,7 @@ function Login() {
       setMsg({ type: 'error', title: message });
     },
     onSettled: () => {
-      setIsLoading(false);
+      setIsGoogleLoading(false);
     },
   });
 
@@ -97,6 +102,7 @@ function Login() {
               p={4}
               _hover={{ opacity: 0.8 }}
               onClick={handleLogin}
+              disabled={isLoading}
               isLoading={isLoading}
               loadingText="Logging In"
             >
@@ -119,6 +125,9 @@ function Login() {
               mb={4}
               _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
               onClick={() => continueWithGoogleMutation.mutate()}
+              disabled={isGoogleLoading} 
+              isLoading={isGoogleLoading} 
+              loadingText="Logging In with Google ..."
             >
               <Link >Continue with Google</Link>
             </Button>
