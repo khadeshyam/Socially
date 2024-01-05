@@ -98,3 +98,16 @@ export const getLikedPosts = (req, res) => {
     });
   });
 };
+
+export const getRecommendedUsers = (req, res) => {
+  const q = "SELECT * FROM users LIMIT 5";
+
+  db.query(q, (err, data) => {
+    if (err) return res.status(500).json(err);
+    const users = data.map(user => {
+      const { password, ...others } = user;
+      return others;
+    });
+    res.status(200).json(users);
+  });
+}

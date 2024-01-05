@@ -1,11 +1,24 @@
-// RightBar.js
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Flex, Text } from '@chakra-ui/react';
+import { Box, Flex, Text, Spinner } from '@chakra-ui/react';
 import SuggestionItem from './SuggestionItem';
+import { useQuery } from '@tanstack/react-query';
+import { makeRequest } from '../utils/axios';
+
 
 const RightBar = () => {
   const [scrollRightY, setScrollRightY] = useState(0);
   const myRef = useRef(null);
+  console.log('right bar')
+
+  const fetchRecommendedUsers = async () => {
+    const res = await makeRequest.get('users/recommended');
+    return res.data;
+  };
+
+  const { data: recommendedUsers, isLoading, error } = useQuery({
+    queryKey: ['recommendedUsers'],
+    queryFn: fetchRecommendedUsers
+  });
 
   useEffect(() => {
     const node = myRef?.current;
@@ -26,8 +39,17 @@ const RightBar = () => {
     if (node) {
       node.scrollTop = scrollRightY;
     }
-    return () => {};
+    return () => { };
   }, [scrollRightY]);
+
+  if (isLoading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center" height={20}>
+        <Spinner size="lg" color="brand.primary" />
+      </Box>
+    );
+  }
+  if (error) return 'An error has occurred: ' + error.message;
 
   return (
     <Box
@@ -54,8 +76,8 @@ const RightBar = () => {
           <Text fontWeight="bold" fontSize="18px" marginBottom="10px">
             Suggestions For You
           </Text>
-          {[1, 2, 3, 4, 5].map((index) => (
-            <SuggestionItem key={index} username={`Shyam ${index}`} />
+          {recommendedUsers.map((user, index) => (
+            <SuggestionItem key={index} username={user.username} avatarUrl={user.profilePic} userId={user.id}/>
           ))}
         </Box>
       </Flex>

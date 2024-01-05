@@ -1,12 +1,36 @@
-// SuggestionItem.js
 import React, { useState } from 'react';
 import { Flex, Image, Text, Button } from '@chakra-ui/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { makeRequest } from '../utils/axios';
 
-const SuggestionItem = ({ username }) => {
+const SuggestionItem = ({ username, avatarUrl,userId }) => {
   const [isFollowing, setIsFollowing] = useState(false);
+  const queryClient = useQueryClient();
+  console.log('suggestion Item')
+
+  const followUnfollowMutation = useMutation(
+    (follow) => {
+      if (follow) {
+        return makeRequest.get(`/relationships`, { followedUserId: userId });
+      } else {
+        return makeRequest.delete(`/relationships`, { followedUserId: userId });
+      }
+    },
+    {
+      onMutate: (follow) => {
+        setIsFollowing(follow);
+      },
+      onError: (err, follow) => {
+        setIsFollowing(!follow);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries('relationships');
+      },
+    }
+  );
 
   const handleFollowToggle = () => {
-    setIsFollowing(!isFollowing);
+    followUnfollowMutation.mutate(!isFollowing);
   };
 
   return (
@@ -20,8 +44,8 @@ const SuggestionItem = ({ username }) => {
     >
       <Flex align="center">
         <Image
-          src="https://images.unsplash.com/flagged/photo-1570612861542-284f4c12e75f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"
-          alt=""
+          src={avatarUrl}
+          alt={username}
           borderRadius="50%"
           boxSize="30px"
           fit="cover"
