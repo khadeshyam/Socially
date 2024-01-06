@@ -11,7 +11,7 @@ import Post from "./components/Post";
 import Posts from "./components/Posts";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
-import ComingSoon from "./pages/CommingSoon";
+import ComingSoon from "./pages/ComingSoon";
 import VerifyEmail from "./pages/VerifyEmail";
 import ForgotPassword from "./pages/ForgotPassword";
 import ResetPassword from "./pages/ResetPassword";
