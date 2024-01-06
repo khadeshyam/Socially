@@ -38,7 +38,9 @@ const App = () => {
             </Box>
           </Suspense>
           <Box flex="6">
-            <Outlet />
+            <Suspense fallback={<Loading />}>
+              <Outlet />
+            </Suspense>
           </Box>
           <Suspense fallback={<Loading />}>
             <Box
