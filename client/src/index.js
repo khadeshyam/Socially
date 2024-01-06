@@ -1,9 +1,12 @@
-import React from "react";
+import React,{Suspense,lazy} from "react";
 import ReactDOM from "react-dom/client";
-import App from "./App";
+
 import { AuthContextProvider } from "./context/authContext";
 import { ChakraProvider } from '@chakra-ui/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+
+const Loading = lazy(() => import("./components/Loading"));
+const App = lazy(() => import("./App"));
 
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -13,7 +16,9 @@ root.render(
   <ChakraProvider>
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
+      <Suspense fallback={Loading}>
         <App />
+        </Suspense>
       </AuthContextProvider>
     </QueryClientProvider>
   </ChakraProvider>
