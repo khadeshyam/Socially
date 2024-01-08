@@ -47,7 +47,7 @@ const Leftbar = () => {
           </Text>
         </Flex>
 
-        <Link to="/profile">
+        <Link to="/">
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
             <IconButton icon={<Home fontSize='medium' />} aria-label="Home" background="transparent" _hover={{ bg: 'transparent' }} />
             <Text fontSize="sm" fontWeight="bold" ml={2}>Home</Text>
