@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Flex, Image, Text, Button } from '@chakra-ui/react';
+import { Flex, Image, Text, Button ,Avatar} from '@chakra-ui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from '../utils/axios';
 
@@ -43,12 +43,10 @@ const SuggestionItem = ({ username, avatarUrl,userId }) => {
       bgColor="transparent"
     >
       <Flex align="center">
-        <Image
+        <Avatar
+          size="sm"
+          name={username}
           src={avatarUrl}
-          alt={username}
-          borderRadius="50%"
-          boxSize="30px"
-          fit="cover"
           marginRight="10px"
         />
         <Text fontWeight="500" fontSize="14px">

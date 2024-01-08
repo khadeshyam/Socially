@@ -21,8 +21,7 @@ import { AuthContext } from '../context/authContext';
 import moment from 'moment';
 import Comments from './Comments';
 import TruncatedText from './TruncatedText';
-
-
+import placeholderImage from '../assets/placeholder.png';
 
 const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
   console.log('iscommentOpen', isCommentOpen);
@@ -156,13 +155,14 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
           <LazyLoadImage
             effect="blur"
             src={post?.img}
+            placeholderSrc={placeholderImage}
             alt={post?.id}
-            fit="cover"
             mt="4"
             display="block"
             objectFit="cover"
             maxWidth="100%"
             maxHeight="100%"
+            threshold={200}
           />
         </Box>
       </Box>
