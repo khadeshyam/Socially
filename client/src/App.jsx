@@ -80,16 +80,12 @@ const App = () => {
           element: <Profile />,
         },
         {
-          path: "/post/:id",
-          element: <Post />,
-        },
-        {
           path: "/comments/:id",
-          element: <Post isCommentOpen={true} userId={currentUser?.id} />,
+          element: <Post isCommentOpen={true} userId={currentUser?.id} isDescTruncated={false}/>,
         },
         {
-          path: "/profile:id",
-          element: <Post isCommentOpen={true} userId={currentUser?.id} />,
+          path: "/post/:id",
+          element: <Post userId={currentUser?.id} isDescTruncated={false}/>,
         },
         {
           path: "/feed",

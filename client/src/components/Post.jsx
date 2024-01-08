@@ -20,12 +20,11 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../context/authContext';
 import moment from 'moment';
 import Comments from './Comments';
+import TruncatedText from './TruncatedText';
 
 
 
-const Post = ({ post, isCommentOpen }) => {
-
-  const commentOpen = isCommentOpen ? true : false;
+const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
   console.log('iscommentOpen', isCommentOpen);
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
@@ -39,9 +38,9 @@ const Post = ({ post, isCommentOpen }) => {
     { enabled: !post }
   );
 
-  console.log('pagePost',pagePost);
+  console.log('pagePost', pagePost);
   if (!post && pagePost) post = { ...pagePost };
-  console.log('post',post);
+  console.log('post', post);
 
 
   const { isLoading: isLikeLoading, error, data } = useQuery({
@@ -97,7 +96,7 @@ const Post = ({ post, isCommentOpen }) => {
     deleteMutation.mutate(post?.id);
   };
 
-  const renderLikeIcon = () => {
+  const LikeIcon = () => {
     if (!isLikeLoading && data?.includes(currentUser?.id)) {
       return <FavoriteOutlinedIcon style={{ color: '#ff6262' }} />;
     }
@@ -109,7 +108,6 @@ const Post = ({ post, isCommentOpen }) => {
       try {
         await navigator.share({
           title: 'Check out this post!',
-          text: post?.desc,
           url: `${window.location.origin}/post/${post?.id}`,
         });
         console.log('Content shared successfully');
@@ -151,21 +149,26 @@ const Post = ({ post, isCommentOpen }) => {
         )}
       </Flex>
       <Box p="4">
-        <Text mt={4} mb={4}>{post?.desc}</Text>
-        <Box>
+        {isDescTruncated ? <TruncatedText text={post?.desc} postId={post?.id} wordLimit={20} />
+          : <Text mt={4} mb={4}>{post?.desc}</Text>
+        }
+        <Box display="flex" justifyContent="center" alignItems="center" p="2" m="2" width="100%">
           <LazyLoadImage
             effect="blur"
             src={post?.img}
-            alt={post?.desc}
+            alt={post?.id}
             fit="cover"
             mt="4"
+            display="block"
+            objectFit="cover"
+            maxWidth="100%"
+            maxHeight="100%"
           />
         </Box>
       </Box>
-      <Flex justify="space-between" p="4">
+      <Flex justifyContent="flex-start" p="4" gap="10">
         <Flex align="center" gap="4" onClick={handleLike} cursor="pointer">
-          {renderLikeIcon()}
-          <Text>{data?.length} Likes</Text>
+          <LikeIcon />
         </Flex>
         <Link
           to={{
@@ -178,15 +181,16 @@ const Post = ({ post, isCommentOpen }) => {
             cursor="pointer"
           >
             <TextsmsOutlinedIcon />
-            <Text>Comments</Text>
           </Flex>
         </Link>
         <Flex align="center" gap="4" onClick={handleShare} cursor="pointer">
           <ShareOutlinedIcon />
-          <Text>Share</Text>
         </Flex>
       </Flex>
-      {commentOpen && <Comments postId={post?.id ? post?.id :id } />}
+      <Flex justifyContent="flex-start" p="4">
+        <Text>{data?.length} Like{data?.length > 1 && `s`}</Text>
+      </Flex>
+      {isCommentOpen && <Comments postId={post?.id ? post?.id : id} />}
     </Box>
   );
 };
