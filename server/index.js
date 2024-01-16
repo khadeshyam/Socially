@@ -9,9 +9,12 @@ import likeRoutes from './routes/likes.js';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { initDb } from './connect.js';
+import SocketService from './services/SocketService.js';
 import path from 'path';
 const __dirname = process.cwd();
 const PORT = process.env.PORT || 5000;
+import http from 'http';
+const server = http.createServer(app);
 
 app.use(cors({
   origin: process.env.CLIENT_URL , // specify the origin
@@ -35,7 +38,9 @@ app.get('/*', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`server is listening on port ${PORT}`);
+  const socketService = new SocketService(server);
+  socketService.initSocketListeners();
   initDb();
 })

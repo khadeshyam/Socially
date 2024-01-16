@@ -12,6 +12,7 @@ const LeftBar = lazy(() => import("./components/LeftBar"));
 const RightBar = lazy(() => import("./components/RightBar"));
 const Post = lazy(() => import("./components/Post"));
 const Posts = lazy(() => import("./components/Posts"));
+const ChatRecommendations = lazy(() => import("./components/ChatRecommendations"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Home = lazy(() => import("./pages/Home"));
 const ComingSoon = lazy(() => import("./pages/ComingSoon"));
@@ -20,6 +21,7 @@ const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const Login = lazy(() => import("./pages/Login"));
 const Register = lazy(() => import("./pages/Register"));
+const Chat = lazy(() => import("./pages/Chat"));
 
 const App = () => {
   const { currentUser } = useAuth();
@@ -96,6 +98,14 @@ const App = () => {
           element: <Posts userId={currentUser?.id} />,
         },
         {
+          path: "/chat-recommendations",
+          element: <ChatRecommendations />,
+        },
+        {
+          path: "/chat",
+          element: <Chat />,
+        },
+        {
           path: "/*",
           element: <ComingSoon />,
         }
@@ -123,6 +133,10 @@ const App = () => {
     },
     {
       path: "/comingsoon",
+      element: <ComingSoon />,
+    },
+    {
+      path: "/*",
       element: <ComingSoon />,
     }
   ]);

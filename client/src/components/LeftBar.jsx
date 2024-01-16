@@ -7,8 +7,8 @@ import {
   FavoriteBorder,
   Search,
   Person,
-  Menu,
-  SettingsApplications
+  SettingsApplications,
+  Message
 } from '@mui/icons-material';
 import Logout from './Logout';
 import { Link } from 'react-router-dom';
@@ -92,13 +92,13 @@ const Leftbar = () => {
             <Text fontSize="sm" fontWeight="bold" ml={2}>Settings</Text>
           </HStack>
         </Link>
-        <Link to="/menu">
+        <Link to="/chat-recommendations">
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
-            <IconButton icon={<Menu />} aria-label="Menu" background="transparent" _hover={{ bg: 'transparent' }} />
-            <Text fontSize="sm" fontWeight="bold" ml={2}>Menu</Text>
+            <IconButton icon={<Message fontSize='medium' />} aria-label="Messages" background="transparent" _hover={{ bg: 'transparent' }} />
+            <Text fontSize="sm" fontWeight="bold" ml={2}>Messages</Text>
           </HStack>
         </Link>
-        
+
         <Logout />
         {/* <IconButton
           icon={colorMode === 'light' ? <DarkMode/> : <LightMode />}
