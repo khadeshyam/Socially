@@ -66,7 +66,15 @@ function Login() {
   return (
     <Box bgGradient="linear(to-r, #8253e0, #b542b3)">
       <Flex h="100vh" alignItems="center" justifyContent="center">
-        <Box p={8} maxW="md" borderWidth={1} borderRadius={8} boxShadow="lg" bg="white" width="100%">
+        <Box
+          p={{ base: 4, md: 8 }}
+          maxW={{ base: '90%', md: 'md' }}
+          borderWidth={1}
+          borderRadius={8}
+          boxShadow="lg"
+          bg="white"
+          width="100%"
+        >
           <Flex justifyContent="center" mb={4}>
             <Text fontSize="xl" fontWeight="bold">
               Socially
@@ -125,8 +133,8 @@ function Login() {
               mb={4}
               _hover={{ borderColor: '#8253e0', backgroundColor: '#e8d9f1' }}
               onClick={() => continueWithGoogleMutation.mutate()}
-              disabled={isGoogleLoading} 
-              isLoading={isGoogleLoading} 
+              disabled={isGoogleLoading}
+              isLoading={isGoogleLoading}
               loadingText="Logging In with Google ..."
             >
               <Link >Continue with Google</Link>
