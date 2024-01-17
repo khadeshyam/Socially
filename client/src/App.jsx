@@ -5,13 +5,11 @@ import {
   Outlet,
   Navigate
 } from "react-router-dom";
-import { Box } from "@chakra-ui/react";
 import { useAuth } from './hooks/useAuth';
 const Loading = lazy(() => import("./components/Loading"));
-const LeftBar = lazy(() => import("./components/LeftBar"));
-const RightBar = lazy(() => import("./components/RightBar"));
 const Post = lazy(() => import("./components/Post"));
 const Posts = lazy(() => import("./components/Posts"));
+const Layout = lazy(() => import("./components/Layout"));
 const ChatRecommendations = lazy(() => import("./components/ChatRecommendations"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Home = lazy(() => import("./pages/Home"));
@@ -27,35 +25,6 @@ const App = () => {
   const { currentUser } = useAuth();
   console.log('currentUser', currentUser);
 
-  const Layout = () => {
-    return (
-      <Suspense fallback={<Loading />}>
-        <Box display="flex">
-          <Suspense fallback={<Loading />}>
-            <Box
-              flex="2.15"
-              display={{ base: "none", md: "block" }}
-            >
-              <LeftBar />
-            </Box>
-          </Suspense>
-          <Box flex="6">
-            <Suspense fallback={<Loading />}>
-              <Outlet />
-            </Suspense>
-          </Box>
-          <Suspense fallback={<Loading />}>
-            <Box
-              flex="3"
-              display={{ base: "none", lg: "block" }}
-            >
-              <RightBar />
-            </Box>
-          </Suspense>
-        </Box>
-      </Suspense>
-    );
-  };
 
   const ProtectedRoute = ({ children }) => {
     if (!currentUser) {

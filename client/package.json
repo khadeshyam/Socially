@@ -23,6 +23,7 @@
     "react-lazy-load-image-component": "^1.6.0",
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
+    "react-swipeable": "^7.0.1",
     "socket.io-client": "^4.7.4",
     "web-vitals": "^2.1.0"
   },
