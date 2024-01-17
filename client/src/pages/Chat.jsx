@@ -16,10 +16,10 @@ const Chat = () => {
 	const [sortedMessages, setSortedMessages] = useState([]);
 
 	useEffect(() => {
-		const combinedMessages = [...(messages[currentUser.id] || []), ...(messages[recipient.id] || [])];
+		const combinedMessages = [...(messages[currentUser?.id] || []), ...(messages[recipient?.id] || [])];
 		combinedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
 		setSortedMessages(combinedMessages);
-	}, [messages, currentUser.id, recipient.id]);
+	}, [messages, currentUser?.id, recipient?.id]);
 
 	const handleSend = (event) => {
 		event.preventDefault();
@@ -40,7 +40,7 @@ const Chat = () => {
 		<Box p={4} display="flex" flexDirection="column" height="100vh">
 			<Flex alignItems="center" mb={4}>
 				<Text fontSize="xl" fontWeight="bold" flex="1">
-					{recipient.username}
+					{recipient?.username}
 				</Text>
 				<IconButton icon={<CallIcon />} aria-label="Audio call" />
 				<IconButton ml={2} icon={<VideoCallIcon />} aria-label="Video call" />
@@ -49,16 +49,16 @@ const Chat = () => {
 				{sortedMessages.map((message) => (
 					<Box
 						key={message.id}
-						alignSelf={message.senderId === currentUser.id ? 'flex-end' : 'flex-start'}
+						alignSelf={message?.senderId === currentUser?.id ? 'flex-end' : 'flex-start'}
 					>
 						<Text
 							fontSize="md"
 							p={2}
 							borderRadius="md"
-							bg={message.senderId === currentUser.id ? 'purple.500' : 'gray.200'}
-							color={message.senderId === currentUser.id ? 'white' : 'black'}
+							bg={message?.senderId === currentUser?.id ? 'purple.500' : 'gray.200'}
+							color={message?.senderId === currentUser?.id ? 'white' : 'black'}
 						>
-							{message.text}
+							{message?.text}
 						</Text>
 					</Box>
 				))}
