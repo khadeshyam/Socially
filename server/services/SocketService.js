@@ -13,9 +13,15 @@ class SocketService {
 		this.io.on('connection', (socket) => {
 			console.log('user connected');
 
+			socket.on('event:join', (userId) => {
+				console.log(`user ${userId} joined`);
+				socket.join(userId);
+			});
+
 			socket.on('event:message', (message) => {
-				console.log(`message: ${JSON.stringify(message)}`);
-				this.io.emit('event:message', message);
+				const msg = JSON.parse(message);
+				this.io.to([msg.senderId,msg.recipientId]).emit('event:message', message);
+				//save the message to the database
 			});
 
 			socket.on('disconnect', () => {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Input, VStack, Text, IconButton, FormControl, Flex } from '@chakra-ui/react';
 import { useLocation } from 'react-router-dom';
 import SendIcon from '@mui/icons-material/Send';
@@ -7,21 +7,19 @@ import VideoCallIcon from '@mui/icons-material/VideoCall';
 import useSocket from '../hooks/useSocket';
 import { useAuth } from '../hooks/useAuth';
 
-const initialMessages = [
-	{ id: 1, text: 'Hello!', sender: 'me' },
-	{ id: 2, text: 'Hi, how are you?', sender: 'other' },
-	// Add more messages here
-];
-
 const Chat = () => {
-
-	const {sendMessage,onMessageRecvd} = useSocket();
 	const { currentUser } = useAuth();
-
+	const { sendMessage, messages } = useSocket();
 	const location = useLocation();
 	const recipient = location.state?.recipient;
-	const [messages, setMessages] = useState(initialMessages);
 	const [newMessage, setNewMessage] = useState('');
+	const [sortedMessages, setSortedMessages] = useState([]);
+
+	useEffect(() => {
+		const combinedMessages = [...(messages[currentUser.id] || []), ...(messages[recipient.id] || [])];
+		combinedMessages.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+		setSortedMessages(combinedMessages);
+	}, [messages, currentUser.id, recipient.id]);
 
 	const handleSend = (event) => {
 		event.preventDefault();
@@ -29,13 +27,12 @@ const Chat = () => {
 			return;
 		}
 		const message = {
-			id: messages.length + 1,
 			text: newMessage,
-			senderId: currentUser?.id, // replace with the authenticated user's id
-			recipientId: recipient?.id, // replace with the selected user's id
+			senderId: currentUser?.id,
+			recipientId: recipient?.id,
+			timestamp: new Date().toISOString(),
 		};
 		sendMessage(message);
-		setMessages([...messages, message]);
 		setNewMessage('');
 	};
 
@@ -43,23 +40,23 @@ const Chat = () => {
 		<Box p={4} display="flex" flexDirection="column" height="100vh">
 			<Flex alignItems="center" mb={4}>
 				<Text fontSize="xl" fontWeight="bold" flex="1">
-					{recipient.name}
+					{recipient.username}
 				</Text>
 				<IconButton icon={<CallIcon />} aria-label="Audio call" />
 				<IconButton ml={2} icon={<VideoCallIcon />} aria-label="Video call" />
 			</Flex>
 			<VStack spacing={4} align="stretch" overflowY="auto" flex="1">
-				{messages.map((message) => (
+				{sortedMessages.map((message) => (
 					<Box
 						key={message.id}
-						alignSelf={message.sender === 'me' ? 'flex-end' : 'flex-start'}
+						alignSelf={message.senderId === currentUser.id ? 'flex-end' : 'flex-start'}
 					>
 						<Text
 							fontSize="md"
 							p={2}
 							borderRadius="md"
-							bg={message.sender === 'me' ? 'blue.500' : 'gray.200'}
-							color={message.sender === 'me' ? 'white' : 'black'}
+							bg={message.senderId === currentUser.id ? 'purple.500' : 'gray.200'}
+							color={message.senderId === currentUser.id ? 'white' : 'black'}
 						>
 							{message.text}
 						</Text>
@@ -74,11 +71,11 @@ const Chat = () => {
 					value={newMessage}
 					onChange={(e) => setNewMessage(e.target.value)}
 					_focus={{
-						boxShadow: '0 0 0 1px #bee3f8', // This color corresponds to blue.200
+						background: 'gray.200',
 					}}
 				/>
 				<IconButton
-					colorScheme="blue"
+					colorScheme="purple"
 					type="submit"
 					icon={<SendIcon />}
 					aria-label="Send message"

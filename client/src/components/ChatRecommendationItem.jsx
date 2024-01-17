@@ -41,13 +41,13 @@ const ChatRecommendationItem = ({ user }) => {
     >
       <Flex align="center">
         <OnlineAvatar
-          name={user.name}
+          name={user.username}
           src={user.avatarUrl}
           isOnline={user.isOnline}
         />
         <Flex direction="column">
           <Text fontWeight="500" fontSize="sm" ml={2}>
-            {user.name}
+            {user.username}
           </Text>
           {user.isOnline && (
             <Text fontSize="xs" color="green.500" ml={2}>
