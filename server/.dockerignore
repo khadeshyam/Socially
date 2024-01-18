@@ -1,9 +1,15 @@
 # dependencies
 /node_modules
 
-# production
-/build
+# # production
+# /build
 
 Dockerfile
+Dockerfile.prod
 
+# local env files
+.env.production
 .env
+
+# pm2 config
+ecosystem.config.json
