@@ -18,7 +18,7 @@ const ChatRecommendations = () => {
 	return (
 		<Box p={5}>
 			<Text fontSize="xl" fontWeight="bold" textAlign="center">Chat Recommendations</Text>
-			{recommendedUsers.map((user) => (
+			{recommendedUsers?.map((user) => (
 				<ChatRecommendationItem key={user.id} user={user} />
 			))}
 		</Box>
