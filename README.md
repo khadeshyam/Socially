@@ -12,6 +12,7 @@
 - Like and comment on posts
 - Follow and unfollow users
 - See a feed of posts
+- 1-1 chat
 
 ## Prerequisites
 
