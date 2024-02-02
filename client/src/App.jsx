@@ -33,6 +33,13 @@ const App = () => {
     return children;
   };
 
+  const RedirectToHome = ({ children }) => {
+    if (!currentUser) {
+      return children;
+    }
+    return <Navigate to="/" />;
+  };
+
   const router = createBrowserRouter([
     {
       path: "/",
@@ -82,19 +89,19 @@ const App = () => {
     },
     {
       path: "/login",
-      element: <Login />,
+      element: <RedirectToHome><Login /></RedirectToHome>,
     },
     {
       path: "/register",
-      element: <Register />,
+      element: <RedirectToHome><Register /></RedirectToHome>,
     },
     {
       path: "/verify-email",
-      element: <VerifyEmail />,
+      element: <RedirectToHome><VerifyEmail /></RedirectToHome>,
     },
     {
       path: "/forgot-password",
-      element: <ForgotPassword />,
+      element: <RedirectToHome><ForgotPassword /></RedirectToHome>,
     },
     {
       path: "/reset-password/:token",
