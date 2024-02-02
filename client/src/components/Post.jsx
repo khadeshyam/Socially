@@ -58,9 +58,9 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
         // Optimistically update the UI
         queryClient.setQueryData(['likes', post?.id], (oldData) => {
           if (liked) {
-            return oldData.filter((id) => id !== currentUser?.id);
+            return oldData?.filter((id) => id !== currentUser?.id);
           } else {
-            return [...oldData, currentUser?.id];
+            return  oldData? [...oldData, currentUser?.id]: [currentUser?.id];
           }
         });
       },
@@ -123,15 +123,15 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
       <Flex align="center" justify="space-between" p="4">
         <Flex align="center">
           <Avatar
-            src={post?.userProfilePic}
-            name={post?.userName}
+            src={post?.user.profilePic}
+            name={post?.user.username}
             borderRadius="full"
             fit="cover"
             mr="4"
           />
           <Box>
-            <Link to={{ pathname: `/profile/${post?.userId}` }}>
-              <Text fontWeight="500">{post?.userName}</Text>
+            <Link to={{ pathname: `/profile/${post?.user.id}` }}>
+              <Text fontWeight="500">{post?.user.userame}</Text>
             </Link>
             <Text fontSize="sm" color="gray.500">
               {moment(post?.createdAt).fromNow()}
@@ -143,7 +143,7 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
           onClick={() => setMenuOpen(!menuOpen)}
           background="transparent" _hover={{ bg: 'transparent' }}
         />
-        {menuOpen && post?.userId === currentUser?.id && (
+        {menuOpen && post?.user.id === currentUser?.id && (
           <Button onClick={handleDelete}>Delete</Button>
         )}
       </Flex>

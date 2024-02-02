@@ -7,6 +7,8 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 const Loading = lazy(() => import("./components/Loading"));
 const App = lazy(() => import("./App"));
 
+console.log("ENV", process.env);
+
 const root = ReactDOM.createRoot(document.getElementById("root"));
 const queryClient = new QueryClient();
 root.render(
