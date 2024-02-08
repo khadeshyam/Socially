@@ -5,7 +5,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CallIcon from '@mui/icons-material/Call';
 import VideoCallIcon from '@mui/icons-material/VideoCall';
 import useSocket from '../hooks/useSocket';
-import { useAuth } from '../hooks/useAuth';
+import  useAuth  from '../hooks/useAuth';
 
 const Chat = () => {
 	const { currentUser } = useAuth();

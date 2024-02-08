@@ -1,6 +1,7 @@
 import { createContext, useState, useEffect } from "react";
 import { makeRequest } from "../utils/axios";
 import { auth, provider as googleProvider, popup } from "../utils/firebase";
+
 export const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {

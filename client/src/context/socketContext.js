@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import io from 'socket.io-client';
-import { useAuth } from '../hooks/useAuth';
+import  useAuth  from '../hooks/useAuth';
 
 export const SocketContext = createContext();
 

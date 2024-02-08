@@ -5,7 +5,7 @@ import {
   Outlet,
   Navigate
 } from "react-router-dom";
-import { useAuth } from './hooks/useAuth';
+import  useAuth  from './hooks/useAuth';
 const Loading = lazy(() => import("./components/Loading"));
 const Post = lazy(() => import("./components/Post"));
 const Posts = lazy(() => import("./components/Posts"));
