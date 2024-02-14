@@ -106,7 +106,7 @@ const Profile = () => {
                   <Text fontSize="12px">{data?.website}</Text>
                 </Flex>
               </Flex>
-              {!(userId === currentUser?.id) ? (
+              {(userId === currentUser?.id) ? (
                 <Button onClick={() => setOpenUpdate(true)}>update</Button>
               ) : (
                 <Button onClick={handleFollow}>
