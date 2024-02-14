@@ -2,20 +2,24 @@ import { useState } from 'react';
 import axios from 'axios';
 import { useMutation } from '@tanstack/react-query';
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
+import { makeRequest } from '../utils/axios'; // adjust the path to match the location of axios.js
 
 const Update = ({ setOpenUpdate, user }) => {
   const [coverPic, setCoverPic] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
 
   const [inputs, setInputs] = useState({
-    name: '',
-    city: '',
-    website: '',
+    name: user.name,
+    city: user.city,
+    website: user.website,
   });
 
+  console.log('user',user);
+
+
   const mutation = useMutation((user) => {
-    return axios.put('/users', user);
-  });
+    return makeRequest.put('/users', user);
+  });  
 
   const uploadToCloudinary = async (file) => {
     try {
@@ -67,15 +71,15 @@ const Update = ({ setOpenUpdate, user }) => {
             </FormControl>
             <FormControl>
               <FormLabel>Name</FormLabel>
-              <Input type="text" name="name" onChange={handleChange} />
+              <Input type="text" name="name" value={inputs.name} onChange={handleChange} />
             </FormControl>
             <FormControl>
               <FormLabel>City</FormLabel>
-              <Input type="text" name="city" onChange={handleChange} />
+              <Input type="text" name="city" value={inputs.city} onChange={handleChange} />
             </FormControl>
             <FormControl>
               <FormLabel>Website</FormLabel>
-              <Input type="text" name="website" onChange={handleChange} />
+              <Input type="text" name="website" value={inputs.website} onChange={handleChange} />
             </FormControl>
           </form>
         </ModalBody>
