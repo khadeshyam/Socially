@@ -10,7 +10,7 @@ function ForgotPassword() {
 
 	const forgotPasswordMutation = useMutation((email) => makeRequest.post('/auth/forgot-password', { email }), {
 		onSuccess: (res) => {
-			console.log(res);
+			//console.log(res);
 			setMessage({type:'success',text:res?.data?.message});
 			setIsLoading(false);
 		},

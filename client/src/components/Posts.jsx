@@ -9,10 +9,10 @@ import { useMatch } from 'react-router-dom';
 const Posts = ({ userId }) => {
   
   const match = useMatch('/favorites');
-  console.log('match', match);
+  //console.log('match', match);
 
   const fetchPosts = async ({ pageParam = 1 }) => {
-    console.log('Fetching page', pageParam); // Log the page being fetched
+    //console.log('Fetching page', pageParam); // Log the page being fetched
     const res = await makeRequest.get(match ? '/users/likedPosts' : '/posts', {
       params: { page: pageParam, userId },
     });
@@ -38,11 +38,11 @@ const Posts = ({ userId }) => {
   });
 
   useEffect(() => {
-    console.log('InView:', inView);
-    console.log('HasNextPage:', hasNextPage);
-    console.log('Status:', status);
+    //console.log('InView:', inView);
+    //console.log('HasNextPage:', hasNextPage);
+    //console.log('Status:', status);
     if (inView && hasNextPage && status === 'success') {
-      console.log('Fetching next page...');
+      //console.log('Fetching next page...');
       fetchNextPage();
     }
   }, [inView, hasNextPage, status]);

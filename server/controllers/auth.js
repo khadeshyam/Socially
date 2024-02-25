@@ -3,7 +3,8 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import { MAX_AGE as maxAge } from '../utils/constants.js';
 import { generateOtp } from '../utils/otp.js';
-import { sendEmail } from '../utils/sendEmail.js';
+import { emailQueue } from '../utils/emailQueue.js';
+
 
 export const register = (req, res) => {
   console.log('register');
@@ -29,18 +30,12 @@ export const register = (req, res) => {
 
     const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '10m' });
     res.cookie('jwtToken', token, { httpOnly: true, maxAge: 10 * 60 * 1000 });
+    const emailContent = `Your OTP for verification is <h3>${otp}. Please use this OTP within the next 10 minutes.`;
 
-    const emailContent = `Your OTP for verification is ${otp}. Please use this OTP within the next 10 minutes.`;
-    sendEmail(req.body.email, 'OTP for Verification', emailContent)
-      .then((info) => {
-        console.log('email sent',info);
-        return res.status(200).json({ message: 'OTP sent to your email' });
-      })
-      .catch(err => {
-        console.log(err);
-        return res.status(422).json({ message: 'Invalid Email' });
-      });
+    const payLoad = { to: req.body.email, subject: 'OTP for Verification', text: emailContent };
 
+    emailQueue.add('send-email', payLoad);
+    return res.status(200).json({ message: 'OTP sent to email' });
   })
 }
 
@@ -162,12 +157,9 @@ export const forgotPassword = (req, res) => {
     <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`;
     const text = `You are receiving this because you (or someone else) have requested the reset of the password for your account.`
 
-    sendEmail(email, 'Password Reset', text, html)
-      .then(() => res.status(200).json({message:'recovery email sent'}))
-      .catch((err) => {
-        console.error('there was an error: ', err);
-        res.status(500).json(err);
-      });
+    const payLoad = { to: email, subject: 'Password Reset', text, html };
+    emailQueue.add('send-fp-link', payLoad);
+    return res.status(200).json({ message: 'Password reset link sent' });
   });
 };
 

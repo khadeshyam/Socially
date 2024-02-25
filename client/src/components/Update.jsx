@@ -14,7 +14,7 @@ const Update = ({ setOpenUpdate, user }) => {
     website: user.website,
   });
 
-  console.log('user',user);
+  //console.log('user',user);
 
 
   const mutation = useMutation((user) => {

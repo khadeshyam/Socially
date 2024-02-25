@@ -45,7 +45,7 @@ const Comments = ({ postId }) => {
   const handleClick = (e) => {
     try {
       const res = mutation.mutate({ desc, postId });
-      console.log(res);
+      // console.log(res);
       setDesc('');
     } catch (error) {
       console.log(error);

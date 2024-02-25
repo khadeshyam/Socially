@@ -61,14 +61,14 @@ const Profile = () => {
             fit="fill"
           />
           <Avatar
-            src={data?.profilePic || "https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg"}
+            src={data?.profilePic}
             alt=""
-            name="Shyam Khade"
-            size={{ base: "md", sm: "lg", md: "xl", lg: "2xl", xl: "3xl" }}
+            name={data?.username}
             position="absolute"
             top="50%"
             left="50%"
             transform="translateX(-50%) translateY(-50%)"
+            boxSize={{ base: "50px", sm: "75px", md: "100px", lg: "100px", xl: "125px" }}
           />
         </Flex>
         <Flex direction="column" p={{ base: "10px", sm: "15px", md: "20px", lg: "25px", xl: "30px" }}>

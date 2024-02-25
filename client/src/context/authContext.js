@@ -29,7 +29,7 @@ export const AuthContextProvider = ({ children }) => {
     try {
       const googleAuthRes = await popup(auth, googleProvider);
       const user = googleAuthRes.user;
-      console.log(user);
+      //console.log(user);
 
       const userInfo = {
         username: user.displayName,

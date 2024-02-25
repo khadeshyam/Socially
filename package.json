@@ -4,15 +4,19 @@
 	"private": "true",
 	"workspaces": [
 		"client",
-		"server"
+		"server",
+		"socket-service",
+		"email-queue"
 	],
 	"scripts": {
 		"client": "cd client && npm start",
 		"build:client": "cd client && npm run build",
 		"server": "cd server && npm run dev",
 		"server:prod": "cd server && npm run start",
-		"dev": "concurrently --kill-others \"npm run server\" \"npm run client\"",
-		"start": "npm run build:client && npm run server:prod"
+		"socket-service": "cd socket-service && npm run dev",
+		"email-queue": "cd email-queue && npm run dev",
+		"dev": "concurrently --kill-others \"npm run server\" \"npm run client\" \"npm run socket-service\" \"npm run email-queue\"",
+		"start": "npm run build:client && npm run server:prod && npm run socket-service && npm run email-queue"
 	},
 	"devDependencies": {
 		"concurrently": "^8.2.2"

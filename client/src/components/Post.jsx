@@ -24,12 +24,12 @@ import TruncatedText from './TruncatedText';
 import placeholderImage from '../assets/placeholder.png';
 
 const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
-  console.log('iscommentOpen', isCommentOpen);
+  //console.log('iscommentOpen', isCommentOpen);
   const [menuOpen, setMenuOpen] = useState(false);
   const { currentUser } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const { id } = useParams();
-  console.log('post', post);
+  //console.log('post', post);
 
   const { data: pagePost } = useQuery(
     ['post', id],
@@ -37,9 +37,9 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
     { enabled: !post }
   );
 
-  console.log('pagePost', pagePost);
+  //console.log('pagePost', pagePost);
   if (!post && pagePost) post = { ...pagePost };
-  console.log('post', post);
+  //console.log('post', post);
 
 
   const { isLoading: isLikeLoading, error, data } = useQuery({

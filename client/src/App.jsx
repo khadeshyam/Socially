@@ -23,7 +23,7 @@ const Chat = lazy(() => import("./pages/Chat"));
 
 const App = () => {
   const { currentUser } = useAuth();
-  console.log('currentUser', currentUser);
+  // console.log('currentUser', currentUser);
 
 
   const ProtectedRoute = ({ children }) => {

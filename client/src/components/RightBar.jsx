@@ -8,8 +8,7 @@ import { makeRequest } from '../utils/axios';
 const RightBar = () => {
   const [scrollRightY, setScrollRightY] = useState(0);
   const myRef = useRef(null);
-  console.log('right bar')
-
+  
   const fetchRecommendedUsers = async () => {
     const res = await makeRequest.get('users/recommended');
     return res.data;
