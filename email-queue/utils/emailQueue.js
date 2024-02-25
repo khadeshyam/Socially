@@ -2,8 +2,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { Queue } from 'bullmq';
 
-console.log('[email-queue] envs:',process.env.REDIS_HOST, process.env.REDIS_PORT, process.env.REDIS_USER, process.env.REDIS_PASSWORD);
-
 const connectionOpts = {
 	host: process.env.REDIS_HOST,
 	port: process.env.REDIS_PORT,
