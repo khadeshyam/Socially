@@ -1,0 +1,12 @@
+# dependencies
+/node_modules
+
+# # production
+# /build
+
+Dockerfile
+Dockerfile.prod
+
+# local env files
+.env.production
+.env

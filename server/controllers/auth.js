@@ -4,6 +4,9 @@ import jwt from 'jsonwebtoken';
 import { MAX_AGE as maxAge } from '../utils/constants.js';
 import { generateOtp } from '../utils/otp.js';
 import { emailQueue } from '../utils/emailQueue.js';
+import { registrationEmail } from '../email-templates/registrationEmail.js';
+import { forgotPasswordEmail } from '../email-templates/forgotPasswordEmail.js';
+
 
 
 export const register = (req, res) => {
@@ -30,12 +33,13 @@ export const register = (req, res) => {
 
     const token = jwt.sign(user, process.env.JWT_SECRET, { expiresIn: '10m' });
     res.cookie('jwtToken', token, { httpOnly: true, maxAge: 10 * 60 * 1000 });
-    const emailContent = `Your OTP for verification is <h3>${otp}. Please use this OTP within the next 10 minutes.`;
 
-    const payLoad = { to: req.body.email, subject: 'OTP for Verification', text: emailContent };
+    const emailContent = registrationEmail(req.body.name, otp);
 
+    const payLoad = { to: req.body.email, subject: 'OTP for Verification', html: emailContent };
+  
     emailQueue.add('send-email', payLoad);
-    return res.status(200).json({ message: 'OTP sent to email' });
+    return res.status(200).json({ message: 'OTP sent to email' });  
   })
 }
 
@@ -152,12 +156,10 @@ export const forgotPassword = (req, res) => {
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
 
-    const html = `<p>Please click on the following link, or paste this into your browser to complete the process within one hour of receiving it:</p>
-    <a href="${process.env.CLIENT_URL}/reset-password/${token}">Reset password</a>
-    <p>If you did not request this, please ignore this email and your password will remain unchanged.</p>`;
-    const text = `You are receiving this because you (or someone else) have requested the reset of the password for your account.`
+    const resetLink = `${process.env.CLIENT_URL}/reset-password/${token}`;
+    const emailContent = forgotPasswordEmail(resetLink);
 
-    const payLoad = { to: email, subject: 'Password Reset', text, html };
+    const payLoad = { to: email, subject: 'Password Reset', html: emailContent };
     emailQueue.add('send-fp-link', payLoad);
     return res.status(200).json({ message: 'Password reset link sent' });
   });
