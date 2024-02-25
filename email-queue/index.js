@@ -3,8 +3,6 @@ import { Worker } from 'bullmq';
 import emailQueue from './utils/emailQueue.js'; 
 import sendEmail from './utils/sendEmail.js';
 
-console.log(emailQueue.opts);
-
 const worker = new Worker(emailQueue.name, async job => {
 	const { to, subject, text, html } = job.data;
 	await sendEmail(to, subject, text, html);
