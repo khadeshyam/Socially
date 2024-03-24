@@ -64,7 +64,7 @@ const Profile = () => {
             src={data?.profilePic || "https://images.pexels.com/photos/14028501/pexels-photo-14028501.jpeg"}
             alt=""
             name="Shyam Khade"
-            size={{ base: "md", sm: "lg", md: "xl", lg: "2xl", xl: "3xl" }}
+            size={{ base: "md", sm: "lg", md: "xl", lg: "2xl", xl: "2xl" }}
             position="absolute"
             top="50%"
             left="50%"
