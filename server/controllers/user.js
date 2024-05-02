@@ -100,7 +100,7 @@ export const getLikedPosts = (req, res) => {
 };
 
 export const getRecommendedUsers = (req, res) => {
-  const q = "SELECT * FROM users LIMIT 5";
+  const q = "SELECT * FROM users ORDER BY RAND()";
 
   db.query(q, (err, data) => {
     if (err) return res.status(500).json(err);
