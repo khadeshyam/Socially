@@ -13,24 +13,36 @@ export const getRelationships = (req, res) => {
 export const addRelationship = (req, res) => {
     const token = req.cookies.accessToken;
     if (!token) return res.status(401).json({ message: 'Not logged in' });
-    //console.log(`followed %o`,req.body);
 
     jwt.verify(token, process.env.JWT_SECRET, (err, userInfo) => {
         if (err) return res.status(403).json({ message: 'Session Expired' });
 
-        const q = 'INSERT INTO relationships (`followerUserId`,`followedUserId`) VALUES (?,?)';
-        const values = [ userInfo.id,req.body.followedUserId];
+        const checkQuery = 'SELECT * FROM relationships WHERE `followerUserId` = ? AND `followedUserId` = ?';
+        const values = [userInfo.id, req.body.followedUserId];
 
-        db.query(q, values, (err, data) => {
+        db.query(checkQuery, values, (err, data) => {
             if (err) {
                 console.log(err);
                 res.status(500).json({ message: 'Server Error' });
             } else {
-                res.status(200).json({ message: 'Following User' });
+                if (data.length > 0) {
+                    res.status(409).json({ message: 'Already following' });
+                } else {
+                    const insertQuery = 'INSERT INTO relationships (`followerUserId`,`followedUserId`) VALUES (?,?)';
+                    db.query(insertQuery, values, (err, data) => {
+                        if (err) {
+                            console.log(err);
+                            res.status(500).json({ message: 'Server Error' });
+                        } else {
+                            res.status(200).json({ message: 'Following User' });
+                        }
+                    });
+                }
             }
-        })
+        });
     });
-}
+};
+
 export const deleteRelationship = (req, res) => {
     const token = req.cookies.accessToken;
     if (!token) return res.status(401).json({ message: 'Not logged in' });

@@ -4,7 +4,6 @@ import SuggestionItem from './SuggestionItem';
 import { useQuery } from '@tanstack/react-query';
 import { makeRequest } from '../utils/axios';
 
-
 const RightBar = () => {
   const [scrollRightY, setScrollRightY] = useState(0);
   const myRef = useRef(null);
@@ -37,9 +36,8 @@ const RightBar = () => {
   useEffect(() => {
     const node = myRef?.current;
     if (node) {
-      node.scrollTop = scrollRightY;
+      node.scrollTo(0, scrollRightY);
     }
-    return () => { };
   }, [scrollRightY]);
 
   if (isLoading) {
@@ -60,7 +58,7 @@ const RightBar = () => {
       overflow="scroll"
       bgColor="white"
       color="black"
-      borderLeft="1px solid #dcdcdc" // Instagram's right bar has a border on the left
+      borderLeft="1px solid #dcdcdc"
       sx={{
         '&::-webkit-scrollbar': {
           display: 'none',
@@ -77,7 +75,7 @@ const RightBar = () => {
             Suggestions For You
           </Text>
           {recommendedUsers.map((user, index) => (
-            <SuggestionItem key={index} username={user.username} avatarUrl={user.profilePic} userId={user.id}/>
+            <SuggestionItem key={index} username={user?.username} avatarUrl={user?.profilePic} userId={user?.id} isfollowing={user?.isFollowing}/>
           ))}
         </Box>
       </Flex>

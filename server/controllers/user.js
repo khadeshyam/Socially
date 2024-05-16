@@ -100,14 +100,35 @@ export const getLikedPosts = (req, res) => {
 };
 
 export const getRecommendedUsers = (req, res) => {
-  const q = "SELECT * FROM users ORDER BY RAND()";
+    const token = req.cookies.accessToken;
+    if (!token) return res.status(401).json({ message: 'Not logged in' });
 
-  db.query(q, (err, data) => {
-    if (err) return res.status(500).json(err);
-    const users = data.map(user => {
-      const { password, ...others } = user;
-      return others;
+    jwt.verify(token, process.env.JWT_SECRET, (err, userInfo) => {
+        if (err) return res.status(403).json({ message: 'Session Expired' });
+
+        const q = "SELECT * FROM users LIMIT 10";
+        const checkQuery = 'SELECT * FROM relationships WHERE `followerUserId` = ? AND `followedUserId` = ?';
+
+        db.query(q, (err, data) => {
+            if (err) return res.status(500).json(err);
+
+            const usersPromises = data.map(user => {
+                const { password, ...others } = user;
+                const values = [userInfo.id, user.id];
+
+                return new Promise((resolve, reject) => {
+                    db.query(checkQuery, values, (err, rows) => {
+                        if (err) reject(err);
+
+                        const isFollowing = rows.length > 0;
+                        resolve({ ...others, isFollowing });
+                    });
+                });
+            });
+
+            Promise.all(usersPromises)
+                .then(users => res.status(200).json(users))
+                .catch(err => res.status(500).json(err));
+        });
     });
-    res.status(200).json(users);
-  });
-}
+};
