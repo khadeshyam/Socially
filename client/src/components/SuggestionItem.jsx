@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { Flex, Image, Text, Button ,Avatar} from '@chakra-ui/react';
+import { Flex, Text, Button, Avatar } from '@chakra-ui/react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from '../utils/axios';
 
-const SuggestionItem = ({ username, avatarUrl,userId }) => {
-  const [isFollowing, setIsFollowing] = useState(false);
+const SuggestionItem = ({ username, avatarUrl, userId, isfollowing }) => {
+  const [isFollowing, setIsFollowing] = useState(isfollowing);
   const queryClient = useQueryClient();
   console.log('suggestion Item')
 
   const followUnfollowMutation = useMutation(
     (follow) => {
       if (follow) {
-        return makeRequest.get(`/relationships`, { followedUserId: userId });
+        return makeRequest.post('/relationships', { followedUserId: userId });
       } else {
-        return makeRequest.delete(`/relationships`, { followedUserId: userId });
+        return makeRequest.delete(`/relationships?followedUserId=${userId}`);
       }
     },
     {
@@ -57,7 +57,7 @@ const SuggestionItem = ({ username, avatarUrl,userId }) => {
         <Button
           background="transparent"
           padding="8px 12px"
-          color={isFollowing ? '#ed4956':'#0095f6'}
+          color={isFollowing ? '#ed4956' : '#0095f6'}
           cursor="pointer"
           borderRadius="4px"
           fontSize="12px"

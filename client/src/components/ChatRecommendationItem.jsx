@@ -22,12 +22,12 @@ const OnlineAvatar = ({ name, src, isOnline }) => (
 );
 
 const ChatRecommendationItem = ({ user }) => {
-  user.isOnline = true;
+  const onlineUser = { ...user, isOnline: true };
   const navigate = useNavigate();
   const navigateToChat = () => {
-    navigate('/chat', { state: { recipient: user} });
+    navigate('/chat', { state: { recipient: onlineUser } });
   };
-  
+
   return (
     <Flex
       align="center"
@@ -41,15 +41,15 @@ const ChatRecommendationItem = ({ user }) => {
     >
       <Flex align="center">
         <OnlineAvatar
-          name={user.username}
-          src={user.avatarUrl}
-          isOnline={user.isOnline}
+          name={onlineUser.username}
+          src={onlineUser.avatarUrl}
+          isOnline={onlineUser.isOnline}
         />
         <Flex direction="column">
           <Text fontWeight="500" fontSize="sm" ml={2}>
-            {user.username}
+            {onlineUser.username}
           </Text>
-          {user.isOnline && (
+          {onlineUser.isOnline && (
             <Text fontSize="xs" color="green.500" ml={2}>
               Online
             </Text>
