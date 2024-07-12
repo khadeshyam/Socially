@@ -13,6 +13,7 @@
 - Follow and unfollow users
 - See a feed of posts
 - 1-1 chat
+- Infinite scrolling of posts
 
 ## Prerequisites
 
