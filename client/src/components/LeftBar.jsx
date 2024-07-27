@@ -1,13 +1,11 @@
 // Sidebar.js
 import React, { useContext } from 'react';
-import { Box, HStack, VStack, IconButton, Text, Flex, useColorMode } from '@chakra-ui/react';
+import { Box, HStack, VStack, IconButton, Text, Flex } from '@chakra-ui/react';
 import {
   Home,
   Explore,
   FavoriteBorder,
-  Search,
   Person,
-  SettingsApplications,
   Message
 } from '@mui/icons-material';
 import Logout from './Logout';
@@ -54,18 +52,6 @@ const Leftbar = () => {
           </HStack>
         </Link>
 
-        <Link to="/search">
-          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
-            <IconButton icon={<Search fontSize='medium' />} aria-label="Home" background="transparent" />
-            <Text fontSize="sm" fontWeight="bold" ml={2}>Search</Text>
-          </HStack>
-        </Link>
-
-        {/* <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" >
-          <IconButton icon={<VideoLibrary fontSize='medium' />} aria-label="Reels" background="transparent" />
-          <Text fontSize="sm" fontWeight="bold" ml={2}>Reels</Text>
-        </HStack> */}
-
         <Link to="/feed">
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px" >
             <IconButton icon={<Explore fontSize='medium' />} aria-label="Explore" background="transparent" _hover={{ bg: 'transparent' }} />
@@ -86,12 +72,6 @@ const Leftbar = () => {
             <Text fontSize="sm" fontWeight="bold" ml={2}>Profile</Text>
           </HStack>
         </Link>
-        <Link to="/settings">
-          <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
-            <IconButton icon={<SettingsApplications fontSize='medium' />} aria-label="Settings" background="transparent" _hover={{ bg: 'transparent' }} />
-            <Text fontSize="sm" fontWeight="bold" ml={2}>Settings</Text>
-          </HStack>
-        </Link>
         <Link to="/chat-recommendations">
           <HStack w="100%" p={2} _hover={{ bg: 'gray.100' }} borderRadius="8px">
             <IconButton icon={<Message fontSize='medium' />} aria-label="Messages" background="transparent" _hover={{ bg: 'transparent' }} />
@@ -100,14 +80,6 @@ const Leftbar = () => {
         </Link>
 
         <Logout />
-        {/* <IconButton
-          icon={colorMode === 'light' ? <DarkMode/> : <LightMode />}
-          aria-label="Toggle Dark Mode"
-          onClick={toggleColorMode}
-          ml={2}
-        /> */}
-
-
 
       </VStack>
     </Box>
