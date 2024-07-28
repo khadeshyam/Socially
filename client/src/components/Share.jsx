@@ -132,7 +132,7 @@ const Share = () => {
               </Text>
             </Flex>
           </label>
-          <Flex align="center" gap="10px" className="item" cursor="pointer">
+          {/* <Flex align="center" gap="10px" className="item" cursor="pointer">
             <Image src={MapIcon} alt="" height="20px" />
             <Text fontSize="12px" color="gray">
               Add Place
@@ -143,7 +143,7 @@ const Share = () => {
             <Text fontSize="12px" color="gray">
               Tag Friends
             </Text>
-          </Flex>
+          </Flex> */}
         </Flex>
         <Flex justify="flex-end">
           <Button

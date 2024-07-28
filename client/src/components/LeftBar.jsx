@@ -19,8 +19,8 @@ const Leftbar = () => {
 
   return (
     <Box
-      bg={'white'} // Set background color based on the color mode
-      color={'black'} // Set text color based on the color mode
+      bg={'white'} 
+      color={'black'}
       h="100vh"
       p={4}
       w="100%"
