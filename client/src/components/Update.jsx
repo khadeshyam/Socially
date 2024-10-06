@@ -1,25 +1,30 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from '@chakra-ui/react';
 import { makeRequest } from '../utils/axios'; // adjust the path to match the location of axios.js
 
 const Update = ({ setOpenUpdate, user }) => {
   const [coverPic, setCoverPic] = useState(null);
   const [profilePic, setProfilePic] = useState(null);
-
   const [inputs, setInputs] = useState({
     name: user.name,
     city: user.city,
     website: user.website,
   });
 
-  console.log('user',user);
+  const queryClient = useQueryClient();
 
-
-  const mutation = useMutation((user) => {
-    return makeRequest.put('/users', user);
-  });  
+  const mutation = useMutation(
+    (updatedUser) => makeRequest.put('/users', updatedUser),
+    {
+      onSuccess: () => {
+        // Invalidate and refetch
+        queryClient.invalidateQueries(['user', user.id]);
+        setOpenUpdate(false);
+      },
+    }
+  );
 
   const uploadToCloudinary = async (file) => {
     try {
@@ -56,8 +61,8 @@ const Update = ({ setOpenUpdate, user }) => {
   return (
     <Modal isOpen={true} onClose={() => setOpenUpdate(false)}>
       <ModalOverlay />
-      <ModalContent >
-        <ModalHeader >Update</ModalHeader>
+      <ModalContent>
+        <ModalHeader>Update</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <form>
@@ -84,7 +89,7 @@ const Update = ({ setOpenUpdate, user }) => {
           </form>
         </ModalBody>
         <ModalFooter>
-          <Button colorScheme="blue" backgroundColor="#0095f6" mr={3} onClick={handleSubmit}>
+          <Button colorScheme="blue" backgroundColor="#0095f6" mr={3} onClick={handleSubmit} isLoading={mutation.isLoading}>
             Update
           </Button>
         </ModalFooter>
