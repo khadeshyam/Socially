@@ -26,14 +26,14 @@ export const initDb = async () => {
   db.execute(`
   CREATE TABLE IF NOT EXISTS social.users (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      username MEDIUMTEXT NOT NULL,
-      email MEDIUMTEXT NOT NULL,
-      password MEDIUMTEXT NOT NULL,
-      name MEDIUMTEXT NOT NULL,
-      coverPic MEDIUMTEXT,
-      profilePic MEDIUMTEXT,
-      city MEDIUMTEXT,
-      website MEDIUMTEXT,
+      username VARCHAR(50) NOT NULL,
+      email VARCHAR(100) NOT NULL,
+      password VARCHAR(255) NOT NULL,
+      name VARCHAR(100) NOT NULL,
+      coverPic TEXT,
+      profilePic TEXT,
+      city VARCHAR(100),
+      website VARCHAR(255),
       fromGoogle BOOLEAN DEFAULT FALSE
   )
 `);
@@ -41,10 +41,10 @@ export const initDb = async () => {
   db.execute(`
   CREATE TABLE IF NOT EXISTS social.posts (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      \`desc\` MEDIUMTEXT,
-      img MEDIUMTEXT,
+      \`desc\` TEXT,
+      img TEXT,
       userId INT NOT NULL,
-      createdAt DATETIME,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (userId) 
           REFERENCES social.users(id)
           ON UPDATE CASCADE
@@ -71,8 +71,8 @@ export const initDb = async () => {
   db.execute(`
   CREATE TABLE IF NOT EXISTS social.comments (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      \`desc\` MEDIUMTEXT,
-      createdAt DATETIME,
+      \`desc\` TEXT,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       userId INT NOT NULL,
       postId INT NOT NULL,
       FOREIGN KEY (userId) 
@@ -89,8 +89,9 @@ export const initDb = async () => {
   db.execute(`
   CREATE TABLE IF NOT EXISTS social.stories (
       id INT AUTO_INCREMENT PRIMARY KEY,
-      img MEDIUMTEXT,
+      img TEXT,
       userId INT NOT NULL,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (userId) 
           REFERENCES social.users(id)
           ON UPDATE CASCADE
@@ -103,6 +104,7 @@ export const initDb = async () => {
       id INT AUTO_INCREMENT PRIMARY KEY,
       followerUserId INT NOT NULL,
       followedUserId INT NOT NULL,
+      createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
       FOREIGN KEY (followerUserId) 
           REFERENCES social.users(id)
           ON UPDATE CASCADE
