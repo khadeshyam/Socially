@@ -16,7 +16,7 @@ root.render(
     <QueryClientProvider client={queryClient}>
       <AuthContextProvider>
         <SocketProvider>
-          <Suspense fallback={Loading}>
+          <Suspense fallback={<Loading/>}>
             <App />
           </Suspense>
         </SocketProvider>
