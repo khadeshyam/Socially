@@ -5,18 +5,31 @@ import {
   IconButton,
   Button,
   Avatar,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import FavoriteBorderOutlinedIcon from '@mui/icons-material/FavoriteBorderOutlined';
 import FavoriteOutlinedIcon from '@mui/icons-material/FavoriteOutlined';
 import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import { Link, useParams } from 'react-router-dom';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { makeRequest } from '../utils/axios';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import 'react-lazy-load-image-component/src/effects/blur.css';
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { AuthContext } from '../context/authContext';
 import moment from 'moment';
 import Comments from './Comments';
@@ -24,12 +37,10 @@ import TruncatedText from './TruncatedText';
 import placeholderImage from '../assets/placeholder.png';
 
 const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
-  console.log('iscommentOpen', isCommentOpen);
-  const [menuOpen, setMenuOpen] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { currentUser } = useContext(AuthContext);
   const queryClient = useQueryClient();
   const { id } = useParams();
-  console.log('post', post);
 
   const { data: pagePost } = useQuery(
     ['post', id],
@@ -37,12 +48,9 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
     { enabled: !post }
   );
 
-  console.log('pagePost', pagePost);
   if (!post && pagePost) post = { ...pagePost };
-  console.log('post', post);
 
-
-  const { isLoading: isLikeLoading, error, data } = useQuery({
+  const { isLoading: isLikeLoading, data } = useQuery({
     queryKey: ['likes', post?.id],
     queryFn: () =>
       makeRequest.get('/likes?postId=' + post?.id).then((res) => res.data),
@@ -55,7 +63,6 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
     },
     {
       onMutate: (liked) => {
-        // Optimistically update the UI
         queryClient.setQueryData(['likes', post?.id], (oldData) => {
           if (liked) {
             return oldData.filter((id) => id !== currentUser?.id);
@@ -65,11 +72,9 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
         });
       },
       onError: (error, liked, context) => {
-        // Rollback the UI changes if the API request fails
         queryClient.setQueryData(['likes', post?.id], context.oldData);
       },
       onSettled: () => {
-        // Refetch the likes after the mutation completes
         queryClient.invalidateQueries(['likes', post?.id]);
       },
     }
@@ -83,6 +88,7 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
       onSuccess: () => {
         queryClient.invalidateQueries(['posts', 'user']);
         queryClient.refetchQueries();
+        onClose();
       },
     }
   );
@@ -126,7 +132,6 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
             src={post?.userProfilePic}
             name={post?.userName}
             borderRadius="full"
-            fit="cover"
             mr="4"
           />
           <Box>
@@ -138,13 +143,31 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
             </Text>
           </Box>
         </Flex>
-        <IconButton
-          icon={<MoreHorizIcon />}
-          onClick={() => setMenuOpen(!menuOpen)}
-          background="transparent" _hover={{ bg: 'transparent' }}
-        />
-        {menuOpen && post?.userId === currentUser?.id && (
-          <Button onClick={handleDelete}>Delete</Button>
+        {post?.userId === currentUser?.id && (
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              icon={<MoreHorizIcon />}
+              variant="ghost"
+              _hover={{ bg: 'transparent' }}
+            />
+            <MenuList
+              minWidth="unset"
+              width="auto"
+              borderRadius="md"
+              border="1px solid #e2e8f0"
+              boxShadow="md"
+            >
+              <MenuItem
+                onClick={onOpen}
+                icon={<DeleteOutlineIcon />}
+                _hover={{ bg: 'gray.100' }}
+                _focus={{ bg: 'gray.100' }}
+              >
+                <Text fontSize="sm">Delete</Text>
+              </MenuItem>
+            </MenuList>
+          </Menu>
         )}
       </Flex>
       <Box p="4">
@@ -157,11 +180,7 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
             src={post?.img}
             placeholderSrc={placeholderImage}
             alt={post?.id}
-            mt="4"
-            display="block"
-            objectFit="cover"
-            maxWidth="100%"
-            maxHeight="100%"
+            style={{ display: 'block', objectFit: 'cover', maxWidth: '100%', maxHeight: '100%' }}
             threshold={200}
           />
         </Box>
@@ -170,16 +189,8 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
         <Flex align="center" gap="4" onClick={handleLike} cursor="pointer">
           <LikeIcon />
         </Flex>
-        <Link
-          to={{
-            pathname: `/comments/${post?.id}`
-          }}
-        >
-          <Flex
-            align="center"
-            gap="4"
-            cursor="pointer"
-          >
+        <Link to={{ pathname: `/comments/${post?.id}` }}>
+          <Flex align="center" gap="4" cursor="pointer">
             <TextsmsOutlinedIcon />
           </Flex>
         </Link>
@@ -188,9 +199,26 @@ const Post = ({ post, isCommentOpen = false, isDescTruncated = true }) => {
         </Flex>
       </Flex>
       <Flex justifyContent="flex-start" p="4">
-        <Text>{data?.length} Like{data?.length > 1 && `s`}</Text>
+        <Text>{data?.length} Like{data?.length !== 1 && 's'}</Text>
       </Flex>
       {isCommentOpen && <Comments postId={post?.id ? post?.id : id} />}
+
+      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Confirm Delete</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            Are you sure you want to delete this post?
+          </ModalBody>
+          <ModalFooter>
+            <Button colorScheme="gray" mr={3} onClick={onClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="red" onClick={handleDelete}>Delete</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
     </Box>
   );
 };
