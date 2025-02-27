@@ -65,6 +65,13 @@ function Register() {
       setMsg({ type: 'error', title: 'Please fill all the fields' });
       return;
     }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(inputs.email)) {
+      setMsg({ type: 'error', title: 'Please enter a valid email address' });
+      return;
+    }
+  
     registerMutation.mutate(inputs);
   };
 

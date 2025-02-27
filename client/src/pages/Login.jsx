@@ -81,7 +81,7 @@ function Login() {
             </Text>
           </Flex>
           <Input
-            placeholder="Username, or email"
+            placeholder="Username or email"
             borderRadius="lg"
             borderWidth={1}
             borderColor="gray.300"
